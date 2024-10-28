@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
 public class GameSession {
     private String sessionId;
     private List<Player> players;
@@ -55,6 +59,10 @@ public class GameSession {
         return false;
     }
 
+    private boolean isValidPlayerMove(Position currentPosition, Position newPosition){
+        return currentPosition.isAdjacent(newPosition) && board.isValidPosition(newPosition) && !board.hasWallAt(newPosition) && !board.isPlayerAt(newPosition);
+    }
+
     public boolean movePlayer(String playerId, Position newPosition) {
         if (status != GameStatus.IN_PROGRESS) {
             return false;
@@ -67,7 +75,7 @@ public class GameSession {
 
         Position currentPos = player.getPosition();
 
-        if (currentPos.isAdjacent(newPosition) && board.isValidPosition(newPosition) && !board.hasWallAt(newPosition)){
+        if (isValidPlayerMove(currentPos, newPosition)){
             if(board.hasBoxAt(newPosition)){
                 boolean moveBox = moveBox(player, currentPos, newPosition);
                 if(!moveBox){

@@ -1,4 +1,4 @@
-package com.cargomaze.cargo_maze;
+package com.cargomaze.cargo_maze.ModelTests;
 
 import com.cargomaze.cargo_maze.model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -6,15 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class GameSessionTest {
     private GameSession gameSession;
     private Player player1,player2, player3, player4;
-    private Board board;
 
     @BeforeEach
     public void setUp() {
         gameSession = new GameSession("session1");
-        board = gameSession.getBoard();
         player1 = new Player("p1","Player 1", gameSession);
         player2 = new Player("p2","Player 2", gameSession);
         player3 = new Player("p3","Player 3", gameSession);

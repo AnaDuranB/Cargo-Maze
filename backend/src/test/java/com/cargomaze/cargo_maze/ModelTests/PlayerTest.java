@@ -177,6 +177,7 @@ public class PlayerTest {
         board.printBoard(gameSession.getPlayers());
     }
 
+    
     @Test
     void testInvalidPlayerMove() {
         System.out.println("Tablero inicial:");
@@ -200,7 +201,7 @@ public class PlayerTest {
     @Test
     void testInvalidPlayerMove_Wall() {
         // try to move into a wall
-        Position wallPos = new Position(0, 0);
+        Position wallPos = new Position(0, 1);
 
         boolean moved = gameSession.movePlayer(player1.getId(), wallPos);
 
@@ -222,26 +223,121 @@ public class PlayerTest {
     void testInvalidPlayerMove_OtherPlayer() {
         // try to move to another player's position
         Position player2Pos = player2.getPosition();
-        boolean moved = gameSession.movePlayer(player1.getId(), player2Pos);
 
-        assertFalse(moved);
+        System.out.println("Tablero inicial:");
+        board.printBoard(gameSession.getPlayers());
+
+        Position newPos1 = new Position(player1.getPosition().getX() , player1.getPosition().getY()+ 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos1));
+
+        Position newPos2 = new Position(player1.getPosition().getX(),  player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos2));
+
+        Position newPos3 = new Position(player1.getPosition().getX() , player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos3));
+
+        Position newPos4 = new Position(player1.getPosition().getX() , player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos4));
+
+        Position newPos5 = new Position(player1.getPosition().getX() , player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos5));
+
+        Position newPos6 = new Position(player1.getPosition().getX() , player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos6));
+
+        Position newPos7 = new Position(player1.getPosition().getX() , player1.getPosition().getY() + 1);
+        assertFalse(gameSession.movePlayer(player1.getId(), newPos7));
+
+        assertEquals(newPos6, player1.getPosition());
         assertNotEquals(player2Pos, player1.getPosition());
+
+        System.out.println("Tablero después del movimiento:");
+        board.printBoard(gameSession.getPlayers());
+
+        
+    }
+
+    @Test
+    void testInvalidPlayerMoveBoxToWall() {
+        System.out.println("Tablero inicial:");
+        board.printBoard(gameSession.getPlayers());
+
+        Position newPos1 = new Position(player2.getPosition().getX() + 1, player2.getPosition().getY());
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos1));
+        
+
+        Position newPos2 = new Position(player2.getPosition().getX(), player2.getPosition().getY() - 1);
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos2));
+
+
+        Position newPos3 = new Position(player2.getPosition().getX(), player2.getPosition().getY() - 1);
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos3));
+
+
+        Position newPos4 = new Position(player2.getPosition().getX() +1, player2.getPosition().getY());
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos4));
+
+        Position newPos5 = new Position(player2.getPosition().getX(), player2.getPosition().getY() -1);
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos5));
+
+        Position newPos6 = new Position(player2.getPosition().getX() - 1, player2.getPosition().getY());
+        assertTrue(gameSession.movePlayer(player2.getId(), newPos6));
+
+        Position newPos7 = new Position(player2.getPosition().getX() - 1, player2.getPosition().getY());
+        assertFalse(gameSession.movePlayer(player2.getId(), newPos7)); //No permite mover ni la caja ni el jugador a una nueva posición.
+
+        assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos6.getX() -1, newPos6.getY())));
+        assertEquals(newPos6, player2.getPosition());
+
+        System.out.println("Tablero después del movimiento:");
+        board.printBoard(gameSession.getPlayers());
     }
 
 
     @Test
-    void testPushBox() {
+    void testValidPlayerMoveBoxToAnotherBox() {
+        System.out.println("Tablero inicial:");
+        board.printBoard(gameSession.getPlayers());
 
+        Position initialPos = player1.getPosition();
+        Position newPos0 = new Position(initialPos.getX() + 1, initialPos.getY());
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos0));
+
+
+        Position newPos1 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos1));
+
+
+        Position newPos2 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos2));
+
+
+        Position newPos3 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos3));
+
+
+        Position newPos4 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos4));
+
+        Position newPos5 = new Position(player1.getPosition().getX() -1, player1.getPosition().getY());
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos5));
+
+        Position newPos6 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos6));
+
+        Position newPos7 = new Position(player1.getPosition().getX() + 1, player1.getPosition().getY());
+        assertTrue(gameSession.movePlayer(player1.getId(), newPos7));
+
+        Position newPos8 = new Position(player1.getPosition().getX() + 1, player1.getPosition().getY());
+        assertFalse(gameSession.movePlayer(player1.getId(), newPos8)); //Se verifica que no se mueven cajas continuas
+
+        //verificar moviento de la caja
+        assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos7.getX() +1, newPos7.getY())));
+        assertEquals(newPos7, player1.getPosition());
+
+        System.out.println("Tablero después del movimiento:");
+        board.printBoard(gameSession.getPlayers());
     }
-
-    /*@Test
-    public void testInvalidMoveBox() {
-        Player player = gameSession.getPlayers().get(0);
-        Position boxPosition = new Position(2, 2);
-        Position invalidPosition = new Position(3, 2);
-
-        assertFalse(gameSession.moveBox(player.getId(), boxPosition, invalidPosition));
-    }*/
 }
 
 
