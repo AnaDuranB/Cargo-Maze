@@ -1,10 +1,13 @@
 package com.cargomaze.cargo_maze.model;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Box {
     private String id;
     private Position position;
-    private Player currentMover;
     private boolean isAtTarget;
+    private Player currentMover;
+    public final ReentrantLock lock = new ReentrantLock();
 
     public Box(String id, Position position) {
         this.id = id;
@@ -34,9 +37,13 @@ public class Box {
     public Position getPosition() {
         return position;
     }
+    
+    
     public Player getCurrentMover() {
         return currentMover;
     }
+
+
     public boolean isAtTarget() {
         return isAtTarget;
     }
