@@ -5,7 +5,7 @@ public class Player{
     private String nickname;
     private Position position;
     private boolean isReady;
-    private GameSession gameSession;
+    private GameSession gameSession; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
 
     public Player(String id, String nickname, GameSession gameSession) {
         this.id = id;
@@ -19,9 +19,11 @@ public class Player{
     }
 
 
-    public boolean updatePosition(Position newPosition){
-        return false;
+    public void updatePosition(Position newPosition){
+        position = newPosition;
     }
+
+    //Se deben crear las excepciones correspondientes al modelo InvalidMove - PlayerNotFOund etc
 
     // getters :)
     public String getId() {

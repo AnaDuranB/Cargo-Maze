@@ -29,7 +29,7 @@ public class Position {
         if (this == o) return true;
         if (!(o instanceof Position)) return false;
         Position position = (Position) o;
-        return x == position.x && y == position.y;
+        return x == position.getX() && y == position.getY();
     }
 
     @Override
