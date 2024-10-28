@@ -11,6 +11,7 @@ public class Board {
     private List<Position> targetPositions;
     private List<Box> boxes;
     private List<Position> playerStartPositions;
+    private List<Player> players;
 
     public Board() {
         initializeBoard();
@@ -21,30 +22,29 @@ public class Board {
         targetPositions = new ArrayList<>();
         boxes = new ArrayList<>();
         playerStartPositions = new ArrayList<>();
-
         loadDefaultLayout();
     }
 
     private void loadDefaultLayout() {
         for (int x = 0; x < WIDTH; x++) {
             for (int y = 0; y < HEIGHT; y++) {
-                cells[x][y] = Cell.EMPTY;
+                cells[x][y] = new Cell(Cell.EMPTY);
             }
         }
         for (int x = 0; x < WIDTH; x++) {
-            cells[x][0] = Cell.WALL;
-            cells[x][HEIGHT-1] = Cell.WALL;
+            cells[x][0] = new Cell(Cell.WALL);
+            cells[x][HEIGHT-1] = new Cell(Cell.WALL);
         }
         for (int y = 0; y < HEIGHT; y++) {
-            cells[0][y] = Cell.WALL;
-            cells[WIDTH-1][y] = Cell.WALL;
+            cells[0][y] = new Cell(Cell.WALL);
+            cells[WIDTH-1][y] = new Cell(Cell.WALL);
         }
 
         // walls
-        cells[5][2] = Cell.WALL;
-        cells[5][3] = Cell.WALL;
-        cells[6][6] = Cell.WALL;
-        cells[6][7] = Cell.WALL;
+        cells[5][2] = new Cell(Cell.WALL);
+        cells[5][3] = new Cell(Cell.WALL);
+        cells[6][6] = new Cell(Cell.WALL);
+        cells[6][7] = new Cell(Cell.WALL);
 
         // target positions
         addTarget(new Position(13, 3));
@@ -54,7 +54,7 @@ public class Board {
         addTarget(new Position(6, 5));
 
         // boxes
-//        addBox(new Position(2, 2));
+//       addBox(new Position(2, 2));
         addBox(new Position(4, 4));
         addBox(new Position(2, 5));
         addBox(new Position(4, 6));
@@ -65,6 +65,7 @@ public class Board {
         playerStartPositions.add(new Position(1, HEIGHT-2));
         playerStartPositions.add(new Position(WIDTH-2, 1));
         playerStartPositions.add(new Position(WIDTH-2, HEIGHT-2));
+
     }
 
     public boolean isValidPosition(Position position) {
@@ -73,11 +74,15 @@ public class Board {
     }
 
     public boolean hasWallAt(Position position) {
-        return cells[position.getX()][position.getY()] == Cell.WALL;
+        return cells[position.getX()][position.getY()].getState() == Cell.WALL;
     }
 
     public boolean hasBoxAt(Position position) {
-        return boxes.stream().anyMatch(box -> box.getPosition().equals(position));
+        return cells[position.getX()][position.getY()].getState() == Cell.BOX;
+    }
+
+    public boolean isPlayerAt(Position position){
+        return cells[position.getX()][position.getY()].getState() == Cell.PLAYER;
     }
 
     public Box getBoxAt(Position position) {
@@ -96,11 +101,12 @@ public class Board {
     }
 
     private void addTarget(Position position) {
-        cells[position.getX()][position.getY()] = Cell.TARGET;
+        cells[position.getX()][position.getY()] = new Cell(Cell.TARGET);;
         targetPositions.add(position);
     }
 
     public void addBox(Position position) {
+        cells[position.getX()][position.getY()] = new Cell(Cell.BOX);;
         boxes.add(new Box(UUID.randomUUID().toString(), position));
     }
 
@@ -112,16 +118,7 @@ public class Board {
     public void printBoard(List<Player> players) {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
-                Position currentPos = new Position(x, y);
-
-                boolean isPlayerHere = players.stream().anyMatch(player -> player.getPosition().equals(currentPos));
-                if (isPlayerHere) {
-                    System.out.print("P "); // players
-                } else if (hasBoxAt(currentPos)) {
-                    System.out.print("C "); // boxes
-                } else {
-                    System.out.print(getCellSymbol(cells[x][y]) + " ");
-                }
+                System.out.print(getCellSymbol(cells[x][y]) + " ");
             }
             System.out.println();
         }
@@ -134,11 +131,23 @@ public class Board {
 
 
     private String getCellSymbol(Cell cell) {
-        switch (cell) {
-            case EMPTY: return ".";
-            case WALL: return "#";
-            case TARGET: return "T";
+        switch (cell.getState()) {
+            case Cell.EMPTY: return ".";
+            case Cell.WALL: return "#";
+            case Cell.TARGET: return "T";
+            case Cell.PLAYER: return "P";
+            case Cell.BOX: return "B";
             default: return "?";
         }
+    }
+
+    public void setPlayers(List<Player> players){ this.players = players;}
+
+    public void setPlayerInBoard(Position position){
+        cells[position.getX()][position.getY()] = new Cell(Cell.PLAYER);
+    }
+
+    public Cell getCellAt(Position position){
+        return cells[position.getX()][position.getY()];
     }
 }
