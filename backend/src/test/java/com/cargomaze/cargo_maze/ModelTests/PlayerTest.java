@@ -16,10 +16,10 @@ public class PlayerTest {
     public void setUp() {
         gameSession = new GameSession("session1");
         board = gameSession.getBoard();
-        player1 = new Player("p1","Player 1", gameSession);
-        player2 = new Player("p2","Player 2", gameSession);
-        player3 = new Player("p3","Player 3", gameSession);
-        player4 = new Player("p4","Player 4", gameSession);
+        player1 = new Player("p1", "Player 1");
+        player2 = new Player("p2", "Player 2");
+        player3 = new Player("p3", "Player 3");
+        player4 = new Player("p4", "Player 4");
 
         gameSession.addPlayer(player1);
         gameSession.addPlayer(player2);

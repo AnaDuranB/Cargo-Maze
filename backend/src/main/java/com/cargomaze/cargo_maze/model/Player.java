@@ -5,12 +5,15 @@ public class Player{
     private String nickname;
     private Position position;
     private boolean isReady;
-    private GameSession gameSession; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
+    private GameSession gameSession = null; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
 
-    public Player(String id, String nickname, GameSession gameSession) {
+    public Player(String id, String nickname) {
         this.id = id;
         this.nickname = nickname;
         this.isReady = false;
+    }
+
+    public void setGameSession(GameSession gameSession) {
         this.gameSession = gameSession;
     }
 

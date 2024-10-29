@@ -18,7 +18,7 @@ public class GameSession {
         this.sessionId = sessionId;
         players = new ArrayList<>();
         status = GameStatus.WAITING_FOR_PLAYERS;
-        board = new Board();
+        board = new Board(); //Sera una instancia inyectada (para más mapas en el futuro)
         board.setPlayers(players);
     }
 
@@ -26,6 +26,7 @@ public class GameSession {
         if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS) {
             return false;
         }
+        player.setGameSession(this);
         players.add(player);
         assignPlayerStartPosition(player);
         return true;
@@ -34,7 +35,6 @@ public class GameSession {
     private void assignPlayerStartPosition(Player player) {
         int playerIndex = players.size() - 1;
         Position startPosition = board.getPlayerStartPosition(playerIndex);
-        System.out.println(startPosition.getX() +  " " +startPosition.getY());
         player.updatePosition(startPosition);
         board.setPlayerInBoard(startPosition);
     }
