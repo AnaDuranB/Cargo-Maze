@@ -28,7 +28,7 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
     @Override
     public void addPlayer(Player player) throws PlayerAlreadyExistsException{
         String playerId = player.getId();
-        if(players.put(playerId, player) == null){
+        if(players.put(playerId, player) != null){
             throw new PlayerAlreadyExistsException("Player with id " + playerId + " already exists");
         }
     }
@@ -45,7 +45,7 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
     @Override
     public void addSession(GameSession session) throws GameSessionAlreadyExists {
         String sessionId = session.getSessionId();
-        if(sessions.put(sessionId, session) == null){
+        if(sessions.put(sessionId, session) != null){
             throw new GameSessionAlreadyExists("Session with id " + sessionId + " already exists");
         }
     }
