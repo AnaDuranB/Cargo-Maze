@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cargo Maze</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="js/apiclient.js"></script>
+    <script src="js/app.js"></script>
 </head>
 <body>
-<div class="logo">
-    <img src="/images/logo.png" alt="Cargo Maze">
-</div>
-<div class="sessions">
-    <span>SALAS</span>
-    <div class="session-container">
-        <button class="session">
-            <div class="part status">
-                <div class="circle-status"></div>
-            </div>
-            <div class="part session-name">Sala</div>
-            <div class="part private">
-<!--                <img src="../static/images/padlock.png" height="10px" alt="Privada">-->
-            </div>
-            <div class="part capacity">1/4</div>
-        </button>
+
+<div class="login-container">
+    <div class="logo">
+        <img src="/images/logo.png" alt="Cargo Maze">
     </div>
+    <form class="login-form">
+        <label for="nickname">LOGIN</label>
+        <input type="text" id="nickname" name="nickname" placeholder="Nickname">
+        <button type="submit" onclick="app.login(document.getElementById('nickname').value)">CONTINUE</button>
+    </form>
 </div>
 </body>
 </html>
+

@@ -26,8 +26,8 @@ public class CargoMazeServices {
         this.persistance = persistance;
     }
 
-    public void createPlayer(String nickname, String playerId) throws PlayerAlreadyExistsException {
-        Player player = new Player(nickname, playerId);
+    public void createPlayer(String nickname) throws PlayerAlreadyExistsException {
+        Player player = new Player(nickname, UUID.randomUUID().toString());
         persistance.addPlayer(player);
     }
 
@@ -46,6 +46,10 @@ public class CargoMazeServices {
 
     public GameSession getGameSession(String gameSessionId) throws GameSessionNotFoundException {
         return persistance.getSession(gameSessionId);
+    }
+
+    public Player getPlayer(String playerId) throws PlayerNotFoundException {
+        return persistance.getPlayer(playerId);
     }
 
 

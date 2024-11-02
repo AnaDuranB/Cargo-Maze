@@ -15,6 +15,7 @@ import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionNotFoundException;
 import com.cargomaze.cargo_maze.persistance.exceptions.PlayerAlreadyExistsException;
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
+import com.cargomaze.cargo_maze.persistance.exceptions.PlayerNotFoundException;
 
 @RestController
 @RequestMapping("/cargoMaze")
@@ -27,25 +28,25 @@ public class CargoMazeController {
          this.cargoMazeServices = cargoMazeServices;
      }
 
-    @GetMapping
-    public ResponseEntity<?> getBaseLobbyManager() {
-        try {
-            return new ResponseEntity<>(cargoMazeServices.getGameSession("1"), HttpStatus.ACCEPTED);
-        } catch (GameSessionNotFoundException ex) {
-            return new ResponseEntity<>("GameSessionNotFound", HttpStatus.NOT_FOUND);
-        }
-    }
-
     /**
      * Reurns the base lobby
      * @return 
      */
     @GetMapping("/session/{id}")
-    public ResponseEntity<?> getBaseLobbyManager(@PathVariable String id) {
+    public ResponseEntity<?> getGameSession(@PathVariable String id) {
         try {
             return new ResponseEntity<>(cargoMazeServices.getGameSession(id),HttpStatus.ACCEPTED);
         } catch ( GameSessionNotFoundException ex) {
             return new ResponseEntity<>("GameSessionNotFound",HttpStatus.NOT_FOUND);
+        }        
+    }
+
+    @GetMapping("/player/{id}")
+    public ResponseEntity<?> getPlayer(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(cargoMazeServices.getPlayer(id),HttpStatus.ACCEPTED);
+        } catch ( PlayerNotFoundException ex) {
+            return new ResponseEntity<>("PlayerNotFound",HttpStatus.NOT_FOUND);
         }        
     }
 
@@ -55,12 +56,12 @@ public class CargoMazeController {
      * @return
      */
     @PostMapping("/player")
-    public ResponseEntity<?> postCreatePlayerEntity(@RequestBody Player player) {
+    public ResponseEntity<?> createPlayer(@RequestParam String nickname) {
         try {
-            cargoMazeServices.createPlayer(player.getNickname(), player.getId());
-            return new ResponseEntity<>(HttpStatus.CREATED, HttpStatus.OK);
+            cargoMazeServices.createPlayer(nickname);
+            return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (PlayerAlreadyExistsException e) {
-            return new ResponseEntity<>("BAD REQUEST", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error creando jugador", HttpStatus.BAD_REQUEST);
         }
     }
 }
