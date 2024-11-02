@@ -9,6 +9,7 @@ import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.exceptions.FullSessionException;
 import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionAlreadyExists;
 import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionNotFoundException;
+import com.cargomaze.cargo_maze.persistance.exceptions.InvalidNicknameException;
 import com.cargomaze.cargo_maze.persistance.exceptions.PlayerAlreadyExistsException;
 import com.cargomaze.cargo_maze.persistance.exceptions.PlayerNotFoundException;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
@@ -26,7 +27,8 @@ public class CargoMazeServices {
         this.persistance = persistance;
     }
 
-    public void createPlayer(String nickname) throws PlayerAlreadyExistsException {
+    public void createPlayer(String nickname) throws PlayerAlreadyExistsException, InvalidNicknameException {
+        if(nickname.isEmpty()) throw new InvalidNicknameException("Invalid nicname");
         Player player = new Player(nickname, UUID.randomUUID().toString());
         persistance.addPlayer(player);
     }

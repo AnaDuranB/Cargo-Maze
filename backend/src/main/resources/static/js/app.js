@@ -6,10 +6,14 @@ const app = (() => {
     const login = async (newNickname) => {
         nickname = newNickname;
         try {
-            await api.createPlayer(nickname);
-            console.log("Player created");
+            const response = await api.createPlayer(nickname);
+            playerId = response.id;
+            console.log("Player created" + nickname);
+            console.log(nickname.length);
+            window.location.href = "../templates/salas.html";
         } catch (error) {
-            console.error("Error player already exists", error);
+            console.error("Error al crear el jugador", error);
+            alert(error.message);
         }
     };
 
