@@ -22,10 +22,10 @@ public class CargoMazeController {
 
     private final CargoMazeServices cargoMazeServices;
     
-     @Autowired
-     public CargoMazeController(CargoMazeServices cargoMazeServices){
-         this.cargoMazeServices = cargoMazeServices;
-     }
+    @Autowired
+    public CargoMazeController(CargoMazeServices cargoMazeServices){
+        this.cargoMazeServices = cargoMazeServices;
+    }
 
     @GetMapping
     public ResponseEntity<?> getBaseLobbyManager() {
@@ -50,17 +50,17 @@ public class CargoMazeController {
     }
 
     /**
-     * Create a new player
-     * @param bp
-     * @return
+     * Creates a new player
+     * @param player The player data sent in the request body
+     * @return Status indicating success or failure
      */
     @PostMapping("/player")
-    public ResponseEntity<?> postCreatePlayerEntity(@RequestBody Player player) {
+    public ResponseEntity<?> createPlayer(@RequestBody Player player) {
         try {
             cargoMazeServices.createPlayer(player.getNickname(), player.getId());
-            return new ResponseEntity<>(HttpStatus.CREATED, HttpStatus.OK);
+            return new ResponseEntity<>("Player created successfully", HttpStatus.CREATED);
         } catch (PlayerAlreadyExistsException e) {
-            return new ResponseEntity<>("BAD REQUEST", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Player already exists", HttpStatus.BAD_REQUEST);
         }
     }
 }
