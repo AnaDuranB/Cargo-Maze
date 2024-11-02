@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionNotFoundException;
@@ -24,14 +27,23 @@ public class CargoMazeController {
          this.cargoMazeServices = cargoMazeServices;
      }
 
+    @GetMapping
+    public ResponseEntity<?> getBaseLobbyManager() {
+        try {
+            return new ResponseEntity<>(cargoMazeServices.getGameSession("1"), HttpStatus.ACCEPTED);
+        } catch (GameSessionNotFoundException ex) {
+            return new ResponseEntity<>("GameSessionNotFound", HttpStatus.NOT_FOUND);
+        }
+    }
+
     /**
      * Reurns the base lobby
      * @return 
      */
-    @RequestMapping(value = "/baseLobby", method = RequestMethod.GET)
-    public ResponseEntity<?> getBaseLobbyManager(){
+    @GetMapping("/session/{id}")
+    public ResponseEntity<?> getBaseLobbyManager(@PathVariable String id) {
         try {
-            return new ResponseEntity<>(cargoMazeServices.getGameSession("1"),HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(cargoMazeServices.getGameSession(id),HttpStatus.ACCEPTED);
         } catch ( GameSessionNotFoundException ex) {
             return new ResponseEntity<>("GameSessionNotFound",HttpStatus.NOT_FOUND);
         }        
@@ -42,7 +54,7 @@ public class CargoMazeController {
      * @param bp
      * @return
      */
-    @RequestMapping(value = "/createPlayer",method = RequestMethod.POST)
+    @PostMapping("/player")
     public ResponseEntity<?> postCreatePlayerEntity(@RequestBody Player player) {
         try {
             cargoMazeServices.createPlayer(player.getNickname(), player.getId());
