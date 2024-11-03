@@ -6,15 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionNotFoundException;
+import com.cargomaze.cargo_maze.persistance.exceptions.InvalidNicknameException;
 import com.cargomaze.cargo_maze.persistance.exceptions.PlayerAlreadyExistsException;
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
+import com.cargomaze.cargo_maze.persistance.exceptions.PlayerNotFoundException;
+
+import java.util.Map;
+
+import org.json.JSONObject;
 
 @RestController
 @RequestMapping("/cargoMaze")
@@ -27,25 +31,25 @@ public class CargoMazeController {
         this.cargoMazeServices = cargoMazeServices;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getBaseLobbyManager() {
-        try {
-            return new ResponseEntity<>(cargoMazeServices.getGameSession("1"), HttpStatus.ACCEPTED);
-        } catch (GameSessionNotFoundException ex) {
-            return new ResponseEntity<>("GameSessionNotFound", HttpStatus.NOT_FOUND);
-        }
-    }
-
     /**
      * Reurns the base lobby
      * @return 
      */
     @GetMapping("/session/{id}")
-    public ResponseEntity<?> getBaseLobbyManager(@PathVariable String id) {
+    public ResponseEntity<?> getGameSession(@PathVariable String id) {
         try {
             return new ResponseEntity<>(cargoMazeServices.getGameSession(id),HttpStatus.ACCEPTED);
         } catch ( GameSessionNotFoundException ex) {
-            return new ResponseEntity<>("GameSessionNotFound",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+        }        
+    }
+
+    @GetMapping("/player/{id}")
+    public ResponseEntity<?> getPlayer(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(cargoMazeServices.getPlayer(id),HttpStatus.ACCEPTED);
+        } catch ( PlayerNotFoundException ex) {
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
         }        
     }
 
@@ -55,12 +59,12 @@ public class CargoMazeController {
      * @return Status indicating success or failure
      */
     @PostMapping("/player")
-    public ResponseEntity<?> createPlayer(@RequestBody Player player) {
+    public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname) {
         try {
-            cargoMazeServices.createPlayer(player.getNickname(), player.getId());
-            return new ResponseEntity<>("Player created successfully", HttpStatus.CREATED);
-        } catch (PlayerAlreadyExistsException e) {
-            return new ResponseEntity<>("Player already exists", HttpStatus.BAD_REQUEST);
+            cargoMazeServices.createPlayer(nickname.get("nickname"));
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (PlayerAlreadyExistsException | InvalidNicknameException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
