@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargo Maze</title>
+  <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+  <div class="logo">
+    <img src="images/logo.png" alt="Cargo Maze">
+</div>
+<div class="container">
+  <!-- Tablero del Juego -->
+  <div id="game-board" class="game-board">
+    <!-- El tablero y los elementos del juego serán generados dinámicamente aquí -->
+  </div>
+
+<!-- Panel de Estado del Juego -->
+<div id="game-status" class="game-status">
+  <h2>Estado del Juego</h2>
+  <p id="status-text">Esperando jugadores...</p>
+  <p id="remaining-goals">Objetivos restantes: <span id="goals-count">0</span></p>
+</div>
+
+  <!-- Controles de Juego -->
+  <div id="controls" class="controls">
+    <button onclick="movePlayer('UP')">Arriba</button>
+    <button onclick="movePlayer('LEFT')">Izquierda</button>
+    <button onclick="movePlayer('RIGHT')">Derecha</button>
+    <button onclick="movePlayer('DOWN')">Abajo</button>
+  </div>
+
+  <!-- Panel de Jugadores -->
+  <div id="player-panel" class="player-panel">
+    <h2>Jugadores</h2>
+    <ul id="player-list">
+      <li>List Item1</li>
+      <li>List Item2</li>
+      <li>List Item3</li>
+    </ul>
+  </div>
+</div>
+
+<script src="js/scripts.js"></script>
+</body>
+</html>

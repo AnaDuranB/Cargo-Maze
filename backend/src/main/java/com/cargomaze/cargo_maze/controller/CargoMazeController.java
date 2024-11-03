@@ -26,10 +26,10 @@ public class CargoMazeController {
 
     private final CargoMazeServices cargoMazeServices;
     
-     @Autowired
-     public CargoMazeController(CargoMazeServices cargoMazeServices){
-         this.cargoMazeServices = cargoMazeServices;
-     }
+    @Autowired
+    public CargoMazeController(CargoMazeServices cargoMazeServices){
+        this.cargoMazeServices = cargoMazeServices;
+    }
 
     /**
      * Reurns the base lobby
@@ -54,9 +54,9 @@ public class CargoMazeController {
     }
 
     /**
-     * Create a new player
-     * @param bp
-     * @return
+     * Creates a new player
+     * @param player The player data sent in the request body
+     * @return Status indicating success or failure
      */
     @PostMapping("/player")
     public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname) {
