@@ -22,17 +22,14 @@ public class GameSession {
     }
 
     public boolean addPlayer(Player player) {
-        if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() == -1) {
+        System.out.println("JUGADOR " + player.getNickname()+ " INDEX " + player.getIndex());
+        if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() != -1) {
             return false;
         }
-
-
         player.setIndex(players.size());
         player.setGameSession(this);
         players.add(player);
         assignPlayerStartPosition(player);
-        System.out.println("Players size: " + players.size());
-        System.out.println(players.get(player.getIndex()));
         return true;
     }
 

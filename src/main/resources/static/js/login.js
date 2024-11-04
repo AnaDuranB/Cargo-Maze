@@ -1,14 +1,11 @@
-
-
-
-import { setNickname } from './state.js';
-
 const login = (() => {
-    var nickname = "";
-    var api = apiClient;
+    let nickname = "";
+    let api = apiClient;
 
     const login = async (newNickname) => {
-        setNickname(newNickname);
+        localStorage.clear();
+        nickname = newNickname;
+        console.log(nickname);
         try {
             await api.login(nickname);
             console.log("Player created" + nickname);
@@ -20,9 +17,7 @@ const login = (() => {
     };
 
     return {
-        login
+        login, nickname
     };
 
 })();
-
-window.login = login;

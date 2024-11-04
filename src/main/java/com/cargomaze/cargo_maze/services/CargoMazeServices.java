@@ -23,6 +23,7 @@ public class CargoMazeServices {
     }
 
     public void createPlayer(String nickname) throws CargoMazePersistanceException{
+        System.out.println("Creating player with nickname: " + nickname);
         if(nickname.isEmpty()) throw new CargoMazePersistanceException(CargoMazePersistanceException.INVALID_NICKNAME_EXCEPTION);
         Player player = new Player(nickname);
         persistance.addPlayer(player);

@@ -1,10 +1,6 @@
-// login.js
-import { getNickname } from './state.js';
-
-
 const sessionMenu = (() => {
-    var nickname = getNickname();
-    var api = apiClient;
+    let nickname = localStorage.getItem('nickname');
+    let api = apiClient;
 
     const enterSession = async (sessionId) => {
         try {
@@ -26,4 +22,3 @@ const sessionMenu = (() => {
 
 })();
 
-window.sessionMenu = sessionMenu;

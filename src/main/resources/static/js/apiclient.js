@@ -8,6 +8,7 @@ const apiClient = (() => {
     const url = "http://localhost:8080/cargoMaze/";
 
     const login = async (nickname) => {
+
         let json = JSON.stringify({nickname: nickname });
         let promise = $.ajax({
             url: url + "login",
@@ -25,22 +26,20 @@ const apiClient = (() => {
             callback(data);
         }catch(error){
             console.error("Error searching for gameSession by id",error);
-        }
+        } 
 
     };
 
     const enterSession = async (gameSessionId, nickname) => {
         let json = JSON.stringify({nickname: nickname });
         let promise = $.ajax({
-            url: url + "session/" + gameSessionId + "/player/" + nickname,
+            url: url + "session/" + gameSessionId + "/player/",
             type: 'PUT',
             data: json,
             contentType: "application/json"
         })
-        return promise;
+        return promise; //BUG PROMESA NO SE PROCESA BIEN
     };
-
-
 
     return {
         login,

@@ -61,7 +61,6 @@ public class CargoMazeController {
      */
     @PostMapping("/login")
     public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname, HttpSession session) {
-        session.setAttribute("nickname", nickname);
         try {
             cargoMazeServices.createPlayer(nickname.get("nickname"));
             return new ResponseEntity<>(HttpStatus.CREATED);
@@ -73,7 +72,7 @@ public class CargoMazeController {
     @PutMapping("/session/{id}/player")
     public ResponseEntity<?> addPlayerToGame(@RequestBody Map<String, String> nickname, @PathVariable String id) {
         try {
-            cargoMazeServices.addNewPlayerToGame(id, nickname.get("nickname"));
+            cargoMazeServices.addNewPlayerToGame(nickname.get("nickname"), id);
             return new ResponseEntity<>(HttpStatus.ACCEPTED); //hay que implementar la validacion si el usuario se sale de la sesion
                                                               // se debe eliminar de la lista de jugadores.
         } catch (CargoMazePersistanceException ex) {

@@ -32,8 +32,11 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
 
     @Override
     public Player getPlayer(String playerName) throws CargoMazePersistanceException {
+        System.out.println(playerName);
         Player player = players.get(playerName);
+        System.out.println(player);
         if (player == null) {
+            System.out.println("si");
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
         return player;
