@@ -74,15 +74,15 @@ public class Board {
     }
 
     public boolean hasWallAt(Position position) {
-        return cells[position.getX()][position.getY()].getState().equals(Cell.WALL);
+        return cells[position.getX()][position.getY()].getState() == Cell.WALL;
     }
 
     public boolean hasBoxAt(Position position) {
-        return cells[position.getX()][position.getY()].getState().equals(Cell.BOX);
+        return cells[position.getX()][position.getY()].getState() == Cell.BOX;
     }
 
     public boolean isPlayerAt(Position position){
-        return cells[position.getX()][position.getY()].getState().equals(Cell.PLAYER);
+        return cells[position.getX()][position.getY()].getState() == Cell.PLAYER;
     }
 
     public Box getBoxAt(Position position) {

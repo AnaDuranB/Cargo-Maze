@@ -24,19 +24,27 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
 
     @Override
     public void addPlayer(Player player) throws CargoMazePersistanceException {
-        String playerName = player.getNickname();
-        if (players.put(playerName, player) != null) {
+        if (players.containsKey(player.getNickname())) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
+        players.put(player.getNickname(), player);
+        System.out.println(player);
+    }
+    @Override
+    public void addPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException {
+        GameSession session = getSession(gameSessionId);
+        Player player = players.get(nickname);
+        if (player == null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+        session.addPlayer(player);
     }
 
+
     @Override
-    public Player getPlayer(String playerName) throws CargoMazePersistanceException {
-        System.out.println(playerName);
-        Player player = players.get(playerName);
-        System.out.println(player);
-        if (player == null) {
-            System.out.println("si");
+    public Player getPlayer(String playerId) throws CargoMazePersistanceException {
+        Player player = players.get(playerId);
+        if(player == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
         return player;
@@ -45,7 +53,7 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
     @Override
     public void addSession(GameSession session) throws CargoMazePersistanceException {
         String sessionId = session.getSessionId();
-        if (sessions.put(sessionId, session) != null) {
+        if(sessions.put(sessionId, session) != null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_ALREADY_EXISTS);
         }
     }
@@ -53,9 +61,16 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
     @Override
     public GameSession getSession(String gameSessionId) throws CargoMazePersistanceException {
         GameSession session = sessions.get(gameSessionId);
-        if (session == null) {
+        if(session == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_NOT_FOUND);
         }
         return session;
     }
+
+    @Override
+    public int getPlayerCount(String gameSessionId) throws CargoMazePersistanceException{
+        GameSession session = sessions.get(gameSessionId);
+        return session.getPlayerCount();
+    }
+
 }
