@@ -4,10 +4,7 @@ package com.cargomaze.cargo_maze.persistance.impl;
 import com.cargomaze.cargo_maze.model.GameSession;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.CargoMazePersistance;
-import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionAlreadyExists;
-import com.cargomaze.cargo_maze.persistance.exceptions.GameSessionNotFoundException;
-import com.cargomaze.cargo_maze.persistance.exceptions.PlayerAlreadyExistsException;
-import com.cargomaze.cargo_maze.persistance.exceptions.PlayerNotFoundException;
+import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,45 +23,36 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
     }
 
     @Override
-    public void addPlayer(Player player) throws PlayerAlreadyExistsException{
+    public void addPlayer(Player player) throws CargoMazePersistanceException {
         String playerId = player.getId();
-        if(players.put(playerId, player) != null){
-            throw new PlayerAlreadyExistsException("Player with id " + playerId + " already exists");
+        if (players.put(playerId, player) != null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
     }
 
     @Override
-    public Player getPlayer(String playerId) throws PlayerNotFoundException {
+    public Player getPlayer(String playerId) throws CargoMazePersistanceException {
         Player player = players.get(playerId);
-        if(player == null){
-            throw new PlayerNotFoundException("Player with id " + playerId + " not found");
+        if (player == null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
         return player;
     }
 
     @Override
-    public void addSession(GameSession session) throws GameSessionAlreadyExists {
+    public void addSession(GameSession session) throws CargoMazePersistanceException {
         String sessionId = session.getSessionId();
-        if(sessions.put(sessionId, session) != null){
-            throw new GameSessionAlreadyExists("Session with id " + sessionId + " already exists");
+        if (sessions.put(sessionId, session) != null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_ALREADY_EXISTS);
         }
     }
 
     @Override
-    public GameSession getSession(String gameSessionId) throws GameSessionNotFoundException {
+    public GameSession getSession(String gameSessionId) throws CargoMazePersistanceException {
         GameSession session = sessions.get(gameSessionId);
-        if(session == null){
-            throw new GameSessionNotFoundException("Session with id " + gameSessionId + " not found");
+        if (session == null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_NOT_FOUND);
         }
         return session;
     }
-
-
-
-    
-    
-
-
-
-     
 }
