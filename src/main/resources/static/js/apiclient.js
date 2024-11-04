@@ -8,7 +8,6 @@ const apiClient = (() => {
     const url = "http://localhost:8080/cargoMaze/";
 
     const login = async (nickname) => {
-
         let json = JSON.stringify({nickname: nickname });
         let promise = $.ajax({
             url: url + "players",
@@ -18,6 +17,7 @@ const apiClient = (() => {
         })
         return promise;
     };
+
 
     const getGameSession = async (gameSessionId) => {
         try{
@@ -47,12 +47,9 @@ const apiClient = (() => {
             // Optionally handle error UI here
             throw error; // Rethrow the error for further handling if needed
         }
-    };
-
-
     return {
         login,
-        getGameSession,
+        getGameSessionBoard,
         enterSession
     };
 

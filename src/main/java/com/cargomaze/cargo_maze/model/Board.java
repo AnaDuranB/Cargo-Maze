@@ -150,4 +150,14 @@ public class Board {
     public Cell getCellAt(Position position){
         return cells[position.getX()][position.getY()];
     }
+
+    public String[][] getBoardState(){
+        String[][] boardState = new String[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                boardState[x][y] = getCellSymbol(cells[x][y]);
+            }
+        }
+        return boardState;
+    }
 }
