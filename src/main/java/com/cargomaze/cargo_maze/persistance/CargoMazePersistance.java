@@ -10,7 +10,7 @@ public interface CargoMazePersistance {
 
     public void addPlayer(Player player) throws CargoMazePersistanceException;
 
-    public Player getPlayer(String playerId) throws CargoMazePersistanceException;
+    public Player getPlayer(String playerName) throws CargoMazePersistanceException;
 
     public void addSession(GameSession session) throws CargoMazePersistanceException;
 

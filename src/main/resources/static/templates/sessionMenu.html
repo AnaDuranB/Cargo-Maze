@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cargo Maze</title>
     <link rel="stylesheet" href="../css/index.css">
+    <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
+    <script src="../js/apiClient.js"></script>
+    <script type="module" src="../js/sessionMenu.js" ></script>
+    <script type="module" src="../js/state.js"></script>
 </head>
 <body>
 <div class="logo">
@@ -13,7 +17,7 @@
 <div class="sessions">
     <span>SALAS</span>
     <div class="session-container">
-        <button class="session">
+        <button class="session" type="submit" onclick="sessionMenu.enterSession('1')">
             <div class="part status">
                 <div class="circle-status"></div>
             </div>

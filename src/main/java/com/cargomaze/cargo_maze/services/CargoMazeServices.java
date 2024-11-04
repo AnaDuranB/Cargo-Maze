@@ -24,12 +24,12 @@ public class CargoMazeServices {
 
     public void createPlayer(String nickname) throws CargoMazePersistanceException{
         if(nickname.isEmpty()) throw new CargoMazePersistanceException(CargoMazePersistanceException.INVALID_NICKNAME_EXCEPTION);
-        Player player = new Player(nickname, UUID.randomUUID().toString());
+        Player player = new Player(nickname);
         persistance.addPlayer(player);
     }
 
-    public void addNewPlayerToGame(String playerId, String gameSessionId) throws CargoMazePersistanceException {    
-        Player player = persistance.getPlayer(playerId);
+    public void addNewPlayerToGame(String playerName, String gameSessionId) throws CargoMazePersistanceException {    
+        Player player = persistance.getPlayer(playerName);
         GameSession gameSession = persistance.getSession(gameSessionId);
         if(!gameSession.addPlayer(player)){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.FULL_SESSION_EXCEPTION);
@@ -45,8 +45,8 @@ public class CargoMazeServices {
         return persistance.getSession(gameSessionId);
     }
 
-    public Player getPlayer(String playerId) throws CargoMazePersistanceException {
-        return persistance.getPlayer(playerId);
+    public Player getPlayer(String playerName) throws CargoMazePersistanceException {
+        return persistance.getPlayer(playerName);
     }
 
 

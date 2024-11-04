@@ -24,15 +24,15 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
 
     @Override
     public void addPlayer(Player player) throws CargoMazePersistanceException {
-        String playerId = player.getId();
-        if (players.put(playerId, player) != null) {
+        String playerName = player.getNickname();
+        if (players.put(playerName, player) != null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
     }
 
     @Override
-    public Player getPlayer(String playerId) throws CargoMazePersistanceException {
-        Player player = players.get(playerId);
+    public Player getPlayer(String playerName) throws CargoMazePersistanceException {
+        Player player = players.get(playerName);
         if (player == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }

@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
+
+import jakarta.servlet.http.HttpSession;
+
 import java.util.Map;
 
 
@@ -39,10 +44,11 @@ public class CargoMazeController {
         }        
     }
 
-    @GetMapping("/player/{id}")
-    public ResponseEntity<?> getPlayer(@PathVariable String id) {
+
+    @GetMapping("/player/{nickName}")
+    public ResponseEntity<?> getPlayer(@PathVariable String nickName) {
         try {
-            return new ResponseEntity<>(cargoMazeServices.getPlayer(id),HttpStatus.ACCEPTED);
+            return new ResponseEntity<>(cargoMazeServices.getPlayer(nickName),HttpStatus.ACCEPTED);
         } catch ( CargoMazePersistanceException ex) {
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
         }        
@@ -53,11 +59,23 @@ public class CargoMazeController {
      * @param player The player data sent in the request body
      * @return Status indicating success or failure
      */
-    @PostMapping("/player")
-    public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname) {
+    @PostMapping("/login")
+    public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname, HttpSession session) {
+        session.setAttribute("nickname", nickname);
         try {
             cargoMazeServices.createPlayer(nickname.get("nickname"));
             return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (CargoMazePersistanceException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/session/{id}/player")
+    public ResponseEntity<?> addPlayerToGame(@RequestBody Map<String, String> nickname, @PathVariable String id) {
+        try {
+            cargoMazeServices.addNewPlayerToGame(id, nickname.get("nickname"));
+            return new ResponseEntity<>(HttpStatus.ACCEPTED); //hay que implementar la validacion si el usuario se sale de la sesion
+                                                              // se debe eliminar de la lista de jugadores.
         } catch (CargoMazePersistanceException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }

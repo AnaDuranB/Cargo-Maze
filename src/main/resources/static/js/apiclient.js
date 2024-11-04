@@ -7,10 +7,10 @@ const apiClient = (() => {
 
     const url = "http://localhost:8080/cargoMaze/";
 
-    const createPlayer = async (nickname) => {
+    const login = async (nickname) => {
         let json = JSON.stringify({nickname: nickname });
         let promise = $.ajax({
-            url: url + "player",
+            url: url + "login",
             type: "POST",
             data: json,
             contentType: "application/json"
@@ -29,11 +29,23 @@ const apiClient = (() => {
 
     };
 
+    const enterSession = async (gameSessionId, nickname) => {
+        let json = JSON.stringify({nickname: nickname });
+        let promise = $.ajax({
+            url: url + "session/" + gameSessionId + "/player/" + nickname,
+            type: 'PUT',
+            data: json,
+            contentType: "application/json"
+        })
+        return promise;
+    };
+
 
 
     return {
-        createPlayer,
-        getGameSession
+        login,
+        getGameSession,
+        enterSession
     };
 
 })();

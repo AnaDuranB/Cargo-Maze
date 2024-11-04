@@ -22,18 +22,22 @@ public class GameSession {
     }
 
     public boolean addPlayer(Player player) {
-        if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS) {
+        if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() == -1) {
             return false;
         }
+
+
+        player.setIndex(players.size());
         player.setGameSession(this);
         players.add(player);
         assignPlayerStartPosition(player);
+        System.out.println("Players size: " + players.size());
+        System.out.println(players.get(player.getIndex()));
         return true;
     }
 
     private void assignPlayerStartPosition(Player player) {
-        int playerIndex = players.size() - 1;
-        Position startPosition = board.getPlayerStartPosition(playerIndex);
+        Position startPosition = board.getPlayerStartPosition(player.getIndex());
         player.updatePosition(startPosition);
         board.setPlayerInBoard(startPosition);
     }
@@ -62,15 +66,15 @@ public class GameSession {
         return currentPosition.isAdjacent(newPosition) && board.isValidPosition(newPosition) && !board.hasWallAt(newPosition) && !board.isPlayerAt(newPosition);
     }
 
-    public boolean movePlayer(String playerId, Position newPosition) {
+    public boolean movePlayer(Player player, Position newPosition) {
         if (status != GameStatus.IN_PROGRESS) {
             return false;
         }
 
-        Player player = findPlayerById(playerId);
+        /*Player player = findPlayerByIndex(playerName);
         if (player == null) {
             return false;
-        }
+        }*/
 
         Position currentPos = player.getPosition();
 
@@ -122,8 +126,12 @@ public class GameSession {
 
     public void startGame() {
         if (players.size() == 4 && players.stream().allMatch(Player::isReady)) {
-            status = GameStatus.IN_PROGRESS;
-            
+            status = GameStatus.IN_PROGRESS;   
+        }
+        System.out.println(players.size() == 4);
+        System.out.println(players.stream().allMatch(Player::isReady));
+        for (Player player : players) {
+            System.out.println(player.getNickname() + " " + player.isReady());
         }
     }
 
@@ -133,11 +141,18 @@ public class GameSession {
         }
     }
 
-    private Player findPlayerById(String playerId) {
+    private Player findPlayerByName(String playerName) {
         return players.stream()
-                .filter(p -> p.getId().equals(playerId))
+                .filter(p -> p.getNickname().equals(playerName))
                 .findFirst()
                 .orElse(null);
+    }
+
+    private Player findPlayerByIndex(Player player) {
+        if(players.isEmpty()){
+            return null;
+        }
+        return players.get(player.getIndex());
     }
 
     public String getSessionId() {
