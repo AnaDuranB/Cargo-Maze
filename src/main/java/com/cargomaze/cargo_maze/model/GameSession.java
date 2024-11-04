@@ -167,4 +167,8 @@ public class GameSession {
     public Board getBoard() {
         return board;
     }
+
+    public String[][] getBoardState(){
+        return board.getBoardState();
+    }
 }

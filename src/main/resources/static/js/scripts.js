@@ -1,4 +1,4 @@
-const board = [
+/*const board = [
     ['W', 'W', 'W', 'W', 'W','W','W','W','W','W','W','W','W','W','W'],
     ['W', 'P', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ','P','W'],
     ['W', ' ', 'B', ' ', ' ','W',' ',' ',' ',' ',' ',' ',' ',' ','W'],
@@ -9,11 +9,16 @@ const board = [
     ['W', ' ', ' ', ' ', ' ',' ','W',' ',' ',' ',' ',' ',' ',' ','W'],
     ['W', 'P', ' ', ' ', ' ',' ',' ',' ',' ',' ',' ',' ',' ','P','W'],
     ['W', 'W', 'W', 'W', 'W','W','W','W','W','W','W','W','W','W','W'],
-];
+];*/
+
+const api = apiClient;
+const board = api.getGameSessionBoard("1"); // se debera cambiar para que se obtenga el id de la sesion presionada.}
+
 
 const gameBoard = document.getElementById('game-board');
 
 function generateBoard(board) {
+    console.log(typeof(board));
     board.forEach(row => {
         row.forEach(cell => {
             const cellDiv = document.createElement('li');
@@ -33,7 +38,7 @@ function generateBoard(board) {
                     cellDiv.classList.add('box');
                     cellDiv.innerText = '📦'; 
                     break;
-                case 'G':
+                case 'T':
                     cellDiv.classList.add('goal');
                     cellDiv.innerText = '⭐'; 
                     break;

@@ -31,6 +31,8 @@ public class CargoMazeController {
         this.cargoMazeServices = cargoMazeServices;
     }
 
+    //Session controller
+
     /**
      * Reurns the base lobby
      * @return 
@@ -44,7 +46,17 @@ public class CargoMazeController {
         }        
     }
 
+    @GetMapping("/session/{id}/board/state")
+    public ResponseEntity<?> getBoardState(@PathVariable String id) {
+        try {
+            return new ResponseEntity<>(cargoMazeServices.getBoardState(id),HttpStatus.ACCEPTED);
+        } catch ( CargoMazePersistanceException ex) {
+            return new ResponseEntity<>(ex.getMessage(),HttpStatus.NOT_FOUND);
+        }        
+    }
 
+    //Player controller
+    
     @GetMapping("/player/{nickName}")
     public ResponseEntity<?> getPlayer(@PathVariable String nickName) {
         try {
@@ -79,4 +91,6 @@ public class CargoMazeController {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    
 }

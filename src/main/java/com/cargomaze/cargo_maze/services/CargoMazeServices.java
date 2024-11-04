@@ -50,6 +50,9 @@ public class CargoMazeServices {
         return persistance.getPlayer(playerName);
     }
 
+    public String[][] getBoardState(String gameSessionId) throws CargoMazePersistanceException {
+        return persistance.getSession(gameSessionId).getBoardState();
+    }
 
 }
 
