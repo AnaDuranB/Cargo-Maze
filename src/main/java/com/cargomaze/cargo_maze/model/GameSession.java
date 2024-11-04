@@ -22,7 +22,6 @@ public class GameSession {
     }
 
     public boolean addPlayer(Player player) {
-        System.out.println("JUGADOR " + player.getNickname()+ " INDEX " + player.getIndex());
         if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() != -1) {
             return false;
         }

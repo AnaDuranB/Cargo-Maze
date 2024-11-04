@@ -18,6 +18,16 @@ const apiClient = (() => {
         return promise;
     };
 
+    const getGameSessionBoard = async (gameSessionId) =>  {
+        try{
+            let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
+            let data = await response.json();
+            return data;
+        }catch(error){
+            console.error("Error searching for gameSession by id",error);
+        }
+    }
+
 
     /*const getGameSession = async (gameSessionId, callback) => {
         try{
@@ -52,7 +62,8 @@ const apiClient = (() => {
     return {
         login,
         getGameSessionBoard,
-        enterSession
+        enterSession,
+
     };
 
 })();

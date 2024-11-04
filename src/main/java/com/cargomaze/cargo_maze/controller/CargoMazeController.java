@@ -40,7 +40,7 @@ public class CargoMazeController {
     }
 
 
-    @GetMapping("/session/{id}/board/state")
+    @GetMapping("/sessions/{id}/board/state")
     public ResponseEntity<?> getBoardState(@PathVariable String id) {
         try {
             return new ResponseEntity<>(cargoMazeServices.getBoardState(id),HttpStatus.ACCEPTED);

@@ -36,7 +36,7 @@ public class PlayerTest {
     @Test
     void testValidPlayerMove() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position initialPos = player1.getPosition();
         Position newPos = new Position(initialPos.getX() + 1, initialPos.getY());
@@ -51,13 +51,13 @@ public class PlayerTest {
         assertEquals(newPos, player1.getPosition());
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testValidPlayerMoveBoxUpToDown() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position initialPos = player1.getPosition();
         Position newPos0 = new Position(initialPos.getX() + 1, initialPos.getY());
@@ -79,13 +79,13 @@ public class PlayerTest {
         assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos4.getX(), newPos4.getY() + 1)));
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testValidPlayerMoveBoxLeftToRight() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position newPos1 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
         assertTrue(player1.move(newPos1));
@@ -105,13 +105,13 @@ public class PlayerTest {
         assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos5.getX() + 1, newPos5.getY())));
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testValidPlayerMoveBoxDownToUp() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position newPos1 = new Position(player2.getPosition().getX() + 1, player2.getPosition().getY());
         assertTrue(player2.move(newPos1));
@@ -128,13 +128,13 @@ public class PlayerTest {
         assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos4.getX(), newPos4.getY() - 1)));
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testValidPlayerMoveRightToLeft() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position newPos1 = new Position(player2.getPosition().getX() + 1, player2.getPosition().getY());
         assertTrue(player2.move(newPos1));
@@ -157,13 +157,13 @@ public class PlayerTest {
         assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos6.getX() - 1, newPos6.getY())));
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testInvalidPlayerMove() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position initialPos = player1.getPosition();
         Position newPos = new Position(initialPos.getX() + 1, initialPos.getY() + 1);
@@ -177,7 +177,7 @@ public class PlayerTest {
         assertNotEquals(newPos, player1.getPosition());
 
         System.out.println("Tablero después del movimiento inválido:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
@@ -207,7 +207,7 @@ public class PlayerTest {
         Position player2Pos = player2.getPosition();
 
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position newPos1 = new Position(player1.getPosition().getX(), player1.getPosition().getY() + 1);
         assertTrue(player1.move(newPos1));
@@ -234,13 +234,13 @@ public class PlayerTest {
         assertNotEquals(player2Pos, player1.getPosition());
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testInvalidPlayerMoveBoxToWall() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position newPos1 = new Position(player2.getPosition().getX() + 1, player2.getPosition().getY());
         assertTrue(player2.move(newPos1));
@@ -267,13 +267,13 @@ public class PlayerTest {
         assertEquals(newPos6, player2.getPosition());
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 
     @Test
     void testValidPlayerMoveBoxToAnotherBox() {
         System.out.println("Tablero inicial:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
 
         Position initialPos = player1.getPosition();
         Position newPos0 = new Position(initialPos.getX() + 1, initialPos.getY());
@@ -308,7 +308,7 @@ public class PlayerTest {
         assertEquals(newPos7, player1.getPosition());
 
         System.out.println("Tablero después del movimiento:");
-        board.printBoard(gameSession.getPlayers());
+        board.printBoard();
     }
 }
 
