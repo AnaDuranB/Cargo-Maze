@@ -19,7 +19,7 @@ const apiClient = (() => {
     };
 
 
-    const getGameSession = async (gameSessionId) => {
+    /*const getGameSession = async (gameSessionId, callback) => {
         try{
             let response = await fetch(`${url}+gameSession/${gameSessionId}`);
             let data = await response.json();
@@ -28,7 +28,7 @@ const apiClient = (() => {
             console.error("Error searching for gameSession by id",error);
         }
 
-    };
+    };¨*/
 
     const enterSession = async (gameSessionId, nickname) => {
         let json = JSON.stringify({ nickname: nickname });
@@ -47,6 +47,8 @@ const apiClient = (() => {
             // Optionally handle error UI here
             throw error; // Rethrow the error for further handling if needed
         }
+    };
+
     return {
         login,
         getGameSessionBoard,
