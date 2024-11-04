@@ -49,7 +49,6 @@ public class Board {
         // target positions
         addTarget(new Position(13, 3));
         addTarget(new Position(13, 4));
-        addTarget(new Position(13, 5));
         addTarget(new Position(13, 6));
         addTarget(new Position(6, 5));
 
