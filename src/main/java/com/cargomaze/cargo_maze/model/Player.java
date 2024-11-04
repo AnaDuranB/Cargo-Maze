@@ -37,7 +37,6 @@ public class Player{
     public void setIndex(int index) {
         this.index = index;
     }
-    //Se deben crear las excepciones correspondientes al modelo InvalidMove - PlayerNotFOund etc
 
     // getters :)
     public String getNickname() {
@@ -53,6 +52,4 @@ public class Player{
     public int getIndex() {
         return index;
     }
-
-
 }

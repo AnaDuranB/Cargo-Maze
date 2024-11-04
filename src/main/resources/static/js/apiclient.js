@@ -11,7 +11,7 @@ const apiClient = (() => {
 
         let json = JSON.stringify({nickname: nickname });
         let promise = $.ajax({
-            url: url + "login",
+            url: url + "players",
             type: "POST",
             data: json,
             contentType: "application/json"
@@ -26,20 +26,29 @@ const apiClient = (() => {
             callback(data);
         }catch(error){
             console.error("Error searching for gameSession by id",error);
-        } 
+        }
 
     };
 
     const enterSession = async (gameSessionId, nickname) => {
-        let json = JSON.stringify({nickname: nickname });
-        let promise = $.ajax({
-            url: url + "session/" + gameSessionId + "/player/",
-            type: 'PUT',
-            data: json,
-            contentType: "application/json"
-        })
-        return promise; //BUG PROMESA NO SE PROCESA BIEN
+        let json = JSON.stringify({ nickname: nickname });
+
+        try {
+            let response = await $.ajax({
+                url: url + "sessions/" + gameSessionId + "/players",
+                type: 'PUT',
+                data: json,
+                contentType: "application/json"
+            });
+            console.log(response); // Log successful response
+            return response; // Return the response to the caller
+        } catch (error) {
+            console.error(`Error entering session: ${error.responseText || error.message}`);
+            // Optionally handle error UI here
+            throw error; // Rethrow the error for further handling if needed
+        }
     };
+
 
     return {
         login,

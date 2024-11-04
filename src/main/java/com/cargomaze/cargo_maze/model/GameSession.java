@@ -33,6 +33,10 @@ public class GameSession {
         return true;
     }
 
+    public int getPlayerCount() {
+        return players.size();
+    }
+
     private void assignPlayerStartPosition(Player player) {
         Position startPosition = board.getPlayerStartPosition(player.getIndex());
         player.updatePosition(startPosition);
@@ -85,13 +89,13 @@ public class GameSession {
             ReentrantLock lock = board.getCellAt(newPosition).lock;
             if(lock.tryLock()){ // se bloquea la celda a donde se va a mover el jugador por si alguno otro intenta acceder a este.
                 try{
-                    player.updatePosition(newPosition); 
+                    player.updatePosition(newPosition);
                     board.getCellAt(currentPos).setState(Cell.EMPTY); //se
                     board.getCellAt(newPosition).setState(Cell.PLAYER);
                 }
                 finally{
                     lock.unlock();
-                    }
+                }
                 return true;
             }
         }
@@ -123,7 +127,7 @@ public class GameSession {
 
     public void startGame() {
         if (players.size() == 4 && players.stream().allMatch(Player::isReady)) {
-            status = GameStatus.IN_PROGRESS;   
+            status = GameStatus.IN_PROGRESS;
         }
         System.out.println(players.size() == 4);
         System.out.println(players.stream().allMatch(Player::isReady));

@@ -5,7 +5,7 @@ const login = (() => {
     const login = async (newNickname) => {
         localStorage.clear();
         nickname = newNickname;
-        console.log(nickname);
+        console.log("Nickname:", nickname);
         try {
             await api.login(nickname);
             console.log("Player created" + nickname);
@@ -17,7 +17,7 @@ const login = (() => {
     };
 
     return {
-        login, nickname
+        login, getNickname: () => nickname
     };
 
 })();

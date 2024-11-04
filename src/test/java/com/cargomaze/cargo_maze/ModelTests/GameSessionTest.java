@@ -44,7 +44,7 @@ public class GameSessionTest {
         gameSession.getPlayers().forEach(player -> player.setReady(true));
         gameSession.startGame();
         assertEquals(GameStatus.IN_PROGRESS, gameSession.getStatus());
-        
+
         //Se verifica que al iniciar el juego se verique que se le asignen las posiciones iniciales a lo jugadores
         assertEquals(gameSession.getPlayers().get(0).getPosition(), new Position(1, 1));
         assertEquals(gameSession.getPlayers().get(1).getPosition(), new Position(1, HEIGHT-2));

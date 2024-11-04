@@ -4,13 +4,16 @@ const sessionMenu = (() => {
 
     const enterSession = async (sessionId) => {
         try {
-            if(nickname.length == 0){
+            if (!nickname || nickname.length === 0) {
                 alert("No se ha ingresado un nickname");
                 return;
             }
-            api.enterSession(sessionId, nickname);
+            const response = await api.enterSession(sessionId, nickname);
+
             window.location.href = "../templates/game.html";
+
         } catch (error) {
+            console.log(error);
             alert("No se pudo ingresar a la sesión"); //hay que implementar la validacion si el usuario se sale de la sesion
                                                       // se debe eliminar de la lista de jugadores.
         }
@@ -21,4 +24,3 @@ const sessionMenu = (() => {
     };
 
 })();
-

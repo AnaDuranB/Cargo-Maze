@@ -1,12 +1,12 @@
 package com.cargomaze.cargo_maze.services;
 
+import com.cargomaze.cargo_maze.persistance.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.cargomaze.cargo_maze.model.GameSession;
 import com.cargomaze.cargo_maze.model.Player;
-import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
 
 import java.util.UUID;
@@ -22,19 +22,32 @@ public class CargoMazeServices {
         this.persistance = persistance;
     }
 
-    public void createPlayer(String nickname) throws CargoMazePersistanceException{
-        System.out.println("Creating player with nickname: " + nickname);
-        if(nickname.isEmpty()) throw new CargoMazePersistanceException(CargoMazePersistanceException.INVALID_NICKNAME_EXCEPTION);
+    public void createPlayer(String nickname) throws CargoMazePersistanceException {
+        if (nickname == null || nickname.isEmpty()) {
+            throw new CargoMazePersistanceException("Invalid nickname");
+        }
+
         Player player = new Player(nickname);
-        persistance.addPlayer(player);
+        try {
+            persistance.addPlayer(player);
+        } catch (CargoMazePersistanceException e) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
+        }
     }
 
-    public void addNewPlayerToGame(String playerName, String gameSessionId) throws CargoMazePersistanceException {    
-        Player player = persistance.getPlayer(playerName);
+    public void addNewPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException{
         GameSession gameSession = persistance.getSession(gameSessionId);
-        if(!gameSession.addPlayer(player)){
+
+        if (gameSession.getPlayers().size() >= 4) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.FULL_SESSION_EXCEPTION);
         }
+        try {
+            persistance.addPlayerToGame(nickname,gameSessionId);
+
+        } catch (CargoMazePersistanceException e) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+
     }
 
     public void createSession(String sessionId) throws CargoMazePersistanceException{
@@ -46,10 +59,12 @@ public class CargoMazeServices {
         return persistance.getSession(gameSessionId);
     }
 
-    public Player getPlayer(String playerName) throws CargoMazePersistanceException {
-        return persistance.getPlayer(playerName);
+    public Player getPlayer(String playerId) throws CargoMazePersistanceException {
+        return persistance.getPlayer(playerId);
     }
 
-
+    public int getPlayerCount(String gameSessionId) throws CargoMazePersistanceException{
+        return persistance.getPlayerCount(gameSessionId);
+    }
 }
 
