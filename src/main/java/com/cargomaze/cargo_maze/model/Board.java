@@ -49,7 +49,6 @@ public class Board {
         // target positions
         addTarget(new Position(13, 3));
         addTarget(new Position(13, 4));
-        addTarget(new Position(13, 5));
         addTarget(new Position(13, 6));
         addTarget(new Position(6, 5));
 
@@ -115,7 +114,7 @@ public class Board {
     public List<Box> getBoxes() { return new ArrayList<>(boxes); }
 
     // printing the board :o
-    public void printBoard(List<Player> players) {
+    public void printBoard() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 System.out.print(getCellSymbol(cells[x][y]) + " ");
@@ -149,5 +148,15 @@ public class Board {
 
     public Cell getCellAt(Position position){
         return cells[position.getX()][position.getY()];
+    }
+
+    public String[][] getBoardState(){
+        String[][] boardState = new String[HEIGHT][WIDTH];
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                boardState[y][x] = getCellSymbol(cells[x][y]);
+            }
+        }
+        return boardState;
     }
 }

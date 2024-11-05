@@ -14,10 +14,10 @@ public class GameSessionTest {
     @BeforeEach
     public void setUp() {
         gameSession = new GameSession("session1");
-        player1 = new Player("p1","Player 1");
-        player2 = new Player("p2","Player 2");
-        player3 = new Player("p3","Player 3");
-        player4 = new Player("p4","Player 4");
+        player1 = new Player("Player 1");
+        player2 = new Player("Player 2");
+        player3 = new Player("Player 3");
+        player4 = new Player("Player 4");
 
         gameSession.addPlayer(player1);
         gameSession.addPlayer(player2);
@@ -33,7 +33,7 @@ public class GameSessionTest {
 
     @Test
     public void testAddPlayer() {
-        Player newPlayer = new Player("5", "Player5");
+        Player newPlayer = new Player("Player5");
         assertFalse(gameSession.addPlayer(newPlayer)); // falso, ya hay 4 jugadores
     }
 
@@ -44,7 +44,7 @@ public class GameSessionTest {
         gameSession.getPlayers().forEach(player -> player.setReady(true));
         gameSession.startGame();
         assertEquals(GameStatus.IN_PROGRESS, gameSession.getStatus());
-        
+
         //Se verifica que al iniciar el juego se verique que se le asignen las posiciones iniciales a lo jugadores
         assertEquals(gameSession.getPlayers().get(0).getPosition(), new Position(1, 1));
         assertEquals(gameSession.getPlayers().get(1).getPosition(), new Position(1, HEIGHT-2));

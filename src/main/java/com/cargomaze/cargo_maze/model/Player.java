@@ -1,16 +1,16 @@
 package com.cargomaze.cargo_maze.model;
 
 public class Player{
-    private String id;
+    private int index;
     private String nickname;
     private Position position;
     private boolean isReady;
     private GameSession gameSession = null; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
 
-    public Player(String id, String nickname) {
-        this.id = id;
+    public Player(String nickname) {
         this.nickname = nickname;
         this.isReady = false;
+        this.index = -1;
     }
 
     public void setGameSession(GameSession gameSession) {
@@ -21,17 +21,15 @@ public class Player{
         this.isReady = ready;
     }
 
-
     public void updatePosition(Position newPosition){
         position = newPosition;
     }
 
-    //Se deben crear las excepciones correspondientes al modelo InvalidMove - PlayerNotFOund etc
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     // getters :)
-    public String getId() {
-        return id;
-    }
     public String getNickname() {
         return nickname;
     }
@@ -42,5 +40,7 @@ public class Player{
         return isReady;
     }
 
-
+    public int getIndex() {
+        return index;
+    }
 }
