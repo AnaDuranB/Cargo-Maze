@@ -22,6 +22,11 @@ const sessionMenu = (() => {
         }
     };
 
+    const sendMessage = () => {
+        var message = { content: 'SIRVE' };
+        stompClient.send('/app/sessions', {}, JSON.stringify(message));
+    }
+
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
@@ -29,7 +34,8 @@ const sessionMenu = (() => {
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             subscription = stompClient.subscribe('/topic/sessions', function (eventbody) {
-                //Logica para manejar la cantidad de jugadores presentada.
+                var theObject=JSON.parse(eventbody.body);
+                console.log(theObject);
             });   
         });
     };
@@ -60,6 +66,7 @@ const sessionMenu = (() => {
         init : function () {
             initSessionMenu();
         },
+        sendMessage
 
     };
 

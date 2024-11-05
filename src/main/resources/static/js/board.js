@@ -113,7 +113,8 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            return stompClient.send("/app/sessions/move." + session);	
+            var message = { content: 'Jugador ' + nickname + ' se ha movido' };
+            return stompClient.send("/app/sessions/move." + session, {}, JSON.stringify(message)); 
          } catch (error) {
             alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
@@ -126,7 +127,9 @@ const board = (() => {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function () {
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function (eventbody) {
+                var theObject=JSON.parse(eventbody.body);
+                console.log(theObject);
                 initializeBoard();
             });
             
