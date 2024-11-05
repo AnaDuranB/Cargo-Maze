@@ -130,7 +130,7 @@ const board = (() => {
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function (eventbody) {
                 var theObject=JSON.parse(eventbody.body);
                 console.log(theObject);
-                initializeBoard();
+                updateGameBoard();
             });
             
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/update" , function (eventbody) {
