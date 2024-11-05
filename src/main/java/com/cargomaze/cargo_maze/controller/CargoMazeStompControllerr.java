@@ -14,8 +14,8 @@ public class CargoMazeStompControllerr {
 	@Autowired
 	SimpMessagingTemplate msgt;
     
-	@MessageMapping("/gameSession")
-    public void handleGameSessionEvent(){
+	@MessageMapping("/sessions")
+    public void handleGameSessionEvent() throws Exception{
         
     }
 
@@ -24,9 +24,9 @@ public class CargoMazeStompControllerr {
 
     }
 
-    @MessageMapping("/newMovement/session/{id}") 
-	public void handleMoveEvent(@DestinationVariable String gameSession) throws Exception{
-        msgt.convertAndSend("/topic/gameSession/"+gameSession);
+    @MessageMapping("/newMovement/sessions/{id}") 
+	public void handleMoveEvent(@DestinationVariable String gameSessionId) throws Exception{
+        msgt.convertAndSend("/topic/sessions/"+gameSessionId);
     }
 		
 }

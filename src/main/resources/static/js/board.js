@@ -15,16 +15,16 @@ const board = (() => {
     document.addEventListener('keydown', (e) => {
         switch(e.key) {
             case 'a':
-                moveTank('LEFT');
+                createPositionFromMovement('LEFT');
                 break;
             case 'd':
-                moveTank('RIGHT');
+                createPositionFromMovement('RIGHT');
                 break;
             case 'w':
-                moveTank('UP');
+                createPositionFromMovement('UP');
                 break;
             case 's':
-                moveTank('DOWN');
+                createPositionFromMovement('DOWN');
                 break;
         }
     });
