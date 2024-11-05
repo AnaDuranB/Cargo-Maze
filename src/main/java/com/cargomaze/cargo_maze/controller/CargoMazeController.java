@@ -1,5 +1,6 @@
 package com.cargomaze.cargo_maze.controller;
 
+import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.exceptions.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,6 @@ public class CargoMazeController {
         if (nickname == null || nickname.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("error", "Nickname is required and cannot be empty"));
         }
-
         try {
             cargoMazeServices.addNewPlayerToGame(nickname, id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("message", "Player added to game session", "sessionId", id, "nickname", nickname));
@@ -99,6 +99,23 @@ public class CargoMazeController {
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         }
     }
+
+    @PutMapping("/sessions/{sessionId}/players/{nickname}/move")
+    public ResponseEntity<?> movePlayer(@RequestBody Position position, @PathVariable String sessionId, @PathVariable String nickname) {
+        if (position == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "position is required"));
+        }
+        System.out.println("POSICION EN EL CONTROLADOR " + position.getX() + " " + position.getY());
+        try {
+            if(!cargoMazeServices.movePlayer(nickname, sessionId, position)){
+                return ResponseEntity.badRequest().body(Map.of("error", "Invalid move"));
+            }
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("message", "Player moved", "sessionId", sessionId, "nickname", nickname));
+        } catch (CargoMazePersistanceException ex) {
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
+        }
+    }
+
 
 //    @DeleteMapping("/sessions/{id}/players/{nickname}")
 //    public ResponseEntity<?> removePlayerFromGame(@PathVariable String id, @PathVariable String nickname) {

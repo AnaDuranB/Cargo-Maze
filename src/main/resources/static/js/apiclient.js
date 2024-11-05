@@ -59,10 +59,28 @@ const apiClient = (() => {
         }
     };
 
+    const movePlayer = async (gameSessionId, nickname, newPosition) => {
+        let json = JSON.stringify({"x": newPosition.x, "y": newPosition.y});
+        console.log(json);
+        try {
+            let response = await $.ajax({
+                url: url + "sessions/" + gameSessionId + "/players/" + nickname + "/move",
+                type: 'PUT',
+                data: json,
+                contentType: "application/json"
+            });
+            console.log(response); // Log successful response
+            return response; // Return the response to the caller
+        } catch (error) {
+            console.log(`Error entering session: ${error.responseText || error.message}`);
+        }
+    };
+
     return {
         login,
         getGameSessionBoard,
         enterSession,
+        movePlayer
 
     };
 

@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cargo Maze</title>
   <link rel="stylesheet" href="../css/game.css">
-  <script src="../js/apiClient.js"></script>
-  <script src="../js/scripts.js"></script>
+  <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
+  <script src="../js/apiclient.js"></script>
+  <script src="../js/board.js"></script>
 </head>
 
 <body>
@@ -29,10 +30,10 @@
 
     <!-- Controles de Juego -->
     <div id="controls" class="controls">
-      <button onclick="movePlayer('UP')">Arriba</button>
-      <button onclick="movePlayer('LEFT')">Izquierda</button>
-      <button onclick="movePlayer('RIGHT')">Derecha</button>
-      <button onclick="movePlayer('DOWN')">Abajo</button>
+      <button onclick="board.createPositionFromMovement('UP')">Arriba</button>
+      <button onclick="board.createPositionFromMovement('LEFT')">Izquierda</button>
+      <button onclick="board.createPositionFromMovement('RIGHT')">Derecha</button>
+      <button onclick="board.createPositionFromMovement('DOWN')">Abajo</button>
     </div>
 
     <!-- Panel de Jugadores -->
@@ -45,12 +46,11 @@
       </ul>
     </div>
   </div>
-
   <script>
+    // Llamar a initializeBoard cuando la página se cargue
     document.addEventListener('DOMContentLoaded', (event) => {
-      initializeBoard();
+        board.initializeBoard();
     });
-
   </script>
 </body>
 

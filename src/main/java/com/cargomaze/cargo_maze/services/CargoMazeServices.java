@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.cargomaze.cargo_maze.model.GameSession;
 import com.cargomaze.cargo_maze.model.Player;
+import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
 
 import java.util.UUID;
@@ -72,5 +73,15 @@ public class CargoMazeServices {
         return persistance.getSession(gameSessionId).getBoardState();
     }
 
+
+    public boolean movePlayer(String playerId, String gameSessionId, Position direction) throws CargoMazePersistanceException {
+        Player player = persistance.getPlayer(playerId);
+        GameSession gameSession = persistance.getSession(gameSessionId); 
+        Position newPosition = new Position(player.getPosition().getX() + direction.getX(), player.getPosition().getY() + direction.getY());
+        System.out.println("POSICION EN EL SERVICIO " + newPosition.getX() + " " + newPosition.getY());
+        boolean result = gameSession.movePlayer(player, newPosition);
+        System.out.println("RESULTADO DEL MOVIMIENTO " + result);
+        return result;
+    }
 }
 

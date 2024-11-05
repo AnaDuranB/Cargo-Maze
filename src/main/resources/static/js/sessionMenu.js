@@ -1,5 +1,5 @@
 const sessionMenu = (() => {
-    let nickname = localStorage.getItem('nickname');
+    let nickname = sessionStorage.getItem('nickname');
     let api = apiClient;
 
     const enterSession = async (sessionId) => {
@@ -8,8 +8,8 @@ const sessionMenu = (() => {
                 alert("No se ha ingresado un nickname");
                 return;
             }
-            const response = await api.enterSession(sessionId, nickname);
-
+            await api.enterSession(sessionId, nickname);
+            sessionStorage.setItem('session', sessionId);
             window.location.href = "../templates/game.html";
 
         } catch (error) {

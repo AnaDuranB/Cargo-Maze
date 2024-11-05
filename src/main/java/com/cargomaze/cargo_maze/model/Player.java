@@ -21,15 +21,6 @@ public class Player{
         this.isReady = ready;
     }
 
-
-    public boolean move(Position newPosition){
-        if(gameSession.movePlayer(this, newPosition)){
-            updatePosition(newPosition);
-            return true;
-        }
-        return false;
-    }
-
     public void updatePosition(Position newPosition){
         position = newPosition;
     }

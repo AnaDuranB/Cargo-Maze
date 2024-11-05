@@ -21,14 +21,23 @@ public class GameSession {
         board.setPlayers(players);
     }
 
+    public void verifyStartingCondition(){
+        if(players.size() == 4 && players.stream().allMatch(Player::isReady)){
+            status = GameStatus.IN_PROGRESS;
+        }
+        System.out.println(status);
+    }
+
     public boolean addPlayer(Player player) {
         if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() != -1) {
             return false;
         }
         player.setIndex(players.size());
         player.setGameSession(this);
+        player.setReady(true);
         players.add(player);
         assignPlayerStartPosition(player);
+        verifyStartingCondition();
         return true;
     }
 
@@ -70,11 +79,6 @@ public class GameSession {
         if (status != GameStatus.IN_PROGRESS) {
             return false;
         }
-
-        /*Player player = findPlayerByIndex(playerName);
-        if (player == null) {
-            return false;
-        }*/
 
         Position currentPos = player.getPosition();
 
