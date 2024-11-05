@@ -19,14 +19,15 @@ public class CargoMazeStompControllerr {
         
     }
 
-    @MessageMapping("/player")
-    public void handlePlayerEvent(){
+    @MessageMapping("/sessions/{id}/panel/update")
+    public void handleGeneralGameBoardEvent(@DestinationVariable String gameSessionId) throws Exception{
+        msgt.ci
 
     }
 
-    @MessageMapping("/newMovement/sessions/{id}") 
+    @MessageMapping("sessions/{id}/move") 
 	public void handleMoveEvent(@DestinationVariable String gameSessionId) throws Exception{
-        msgt.convertAndSend("/topic/sessions/"+gameSessionId);
+        msgt.convertAndSend("/topic/sessions/"+gameSessionId +"/move");
     }
 		
 }

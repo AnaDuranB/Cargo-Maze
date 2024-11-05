@@ -30,7 +30,7 @@ const board = (() => {
     });
 
 
-    const initializeBoard = async () => {
+    const updateGameBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             console.log(boardArray);
@@ -113,11 +113,12 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            return stompClient.send("/app/newMovement/session/" + session, {});
+            return stompClient.send("/app/newMovement/session/" + session);
          } catch (error) {
             alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
     };
+
 
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
@@ -126,10 +127,15 @@ const board = (() => {
         sessionStorage.setItem('stompClient', stompClient); //guardar el stomp client para no instanciar diferentes clientes.
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            subscription = stompClient.subscribe('/topic/sessions/' + session , function () {
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function () {
                 initializeBoard();
-            });   
+            });
+            
+            subscription = stompClient.subscribe('/topic/sessions/' + sessions + "/update" , function (eventbody) {
+                //update panels method
+            });
         });
+
     };
 
     const initGameSession = () => {
@@ -143,7 +149,7 @@ const board = (() => {
         },
         createPositionFromMovement,
         movePlayer,
-        initializeBoard
+        updateGameBoard
     };
 
 })();
