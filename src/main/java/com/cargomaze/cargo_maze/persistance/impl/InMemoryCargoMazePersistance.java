@@ -6,6 +6,7 @@ import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.CargoMazePersistance;
 import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Component;
@@ -72,5 +73,9 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         GameSession session = sessions.get(gameSessionId);
         return session.getPlayerCount();
     }
-
+    @Override
+    public List<Player> getPlayersInSession(String gameSessionId) throws CargoMazePersistanceException {
+        GameSession session = getSession(gameSessionId);
+        return session.getPlayers();
+    }
 }
