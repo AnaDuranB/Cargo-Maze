@@ -59,6 +59,15 @@ const apiClient = (() => {
         }
     };
 
+    const getPlayersInSession = async (gameSessionId) => {
+        try {
+            let response = await fetch(`${url}sessions/${gameSessionId}/players`);
+            return await response.json();
+        } catch (error) {
+            console.error("Error retrieving players in session:", error);
+        }
+    };
+
     const movePlayer = async (gameSessionId, nickname, newPosition) => {
         let json = JSON.stringify({"x": newPosition.x, "y": newPosition.y});
         console.log(json);
@@ -80,6 +89,7 @@ const apiClient = (() => {
         login,
         getGameSessionBoard,
         enterSession,
+        getPlayersInSession,
         movePlayer
 
     };

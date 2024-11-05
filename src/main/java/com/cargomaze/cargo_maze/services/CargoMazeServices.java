@@ -10,6 +10,7 @@ import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -50,7 +51,9 @@ public class CargoMazeServices {
         }
 
     }
-
+    public List<Player> getPlayersInSession(String gameSessionId) throws CargoMazePersistanceException {
+        return persistance.getPlayersInSession(gameSessionId);
+    }
     public void createSession(String sessionId) throws CargoMazePersistanceException{
         GameSession session = new GameSession(sessionId);
         persistance.addSession(session);
