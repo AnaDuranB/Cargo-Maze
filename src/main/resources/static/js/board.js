@@ -147,3 +147,5 @@ const board = (() => {
     };
 
 })();
+
+board.init();

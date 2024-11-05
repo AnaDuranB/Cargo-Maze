@@ -65,3 +65,5 @@ const sessionMenu = (() => {
     };
 
 })();
+
+sessionMenu.init();
