@@ -125,7 +125,8 @@ public class GameSession {
         return player.getPosition().isAdjacent(box.getPosition()) &&
                 board.isValidPosition(newPosition) &&
                 !board.hasWallAt(newPosition) &&
-                !board.hasBoxAt(newPosition);
+                !board.hasBoxAt(newPosition) &&
+                !board.isPlayerAt(newPosition);
     }
 
     public void startGame() {
