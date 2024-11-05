@@ -113,7 +113,7 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            return stompClient.send("/app/newMovement/session/" + session);
+            return stompClient.send("/app/sessions/move." + session);	
          } catch (error) {
             alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
@@ -124,14 +124,13 @@ const board = (() => {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
-        sessionStorage.setItem('stompClient', stompClient); //guardar el stomp client para no instanciar diferentes clientes.
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function () {
                 initializeBoard();
             });
             
-            subscription = stompClient.subscribe('/topic/sessions/' + sessions + "/update" , function (eventbody) {
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/update" , function (eventbody) {
                 //update panels method
             });
         });

@@ -26,7 +26,6 @@ const sessionMenu = (() => {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
-        sessionStorage.setItem('stompClient', stompClient); //guardar el stomp client para no instanciar diferentes clientes.
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             subscription = stompClient.subscribe('/topic/sessions', function (eventbody) {
