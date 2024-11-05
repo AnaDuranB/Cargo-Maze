@@ -1,6 +1,8 @@
 const sessionMenu = (() => {
     let nickname = sessionStorage.getItem('nickname');
     let api = apiClient;
+    var stompClient = null;
+    var subscription = null;
 
     const enterSession = async (sessionId) => {
         try {
@@ -10,6 +12,7 @@ const sessionMenu = (() => {
             }
             await api.enterSession(sessionId, nickname);
             sessionStorage.setItem('session', sessionId);
+
             window.location.href = "../templates/game.html";
 
         } catch (error) {
@@ -19,8 +22,46 @@ const sessionMenu = (() => {
         }
     };
 
+    var connectAndSubscribe = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        stompClient = Stomp.over(socket);
+        sessionStorage.setItem('stompClient', stompClient); //guardar el stomp client para no instanciar diferentes clientes.
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            subscription = stompClient.subscribe('/topic/sessions', function (eventbody) {
+                //Logica para manejar la cantidad de jugadores presentada.
+            });   
+        });
+    };
+
+    const initSessionMenu = () => {
+        connectAndSubscribe();
+    };
+
+    const unsubscribe = () => {
+        if (subscription !== null) {
+            subscription.unsubscribe();
+        }
+        console.log("Unsubscribed from the gameSession Topic");
+    };
+
+    const connect = () => {
+        if (subscription != null){
+            subscription.unsubscribe();
+            clearCanvas();
+            connectAndSubscribe();
+        }
+    };
+
     return {
-        enterSession
+        enterSession,
+        unsubscribe,
+        connect,
+        init : function () {
+            initSessionMenu();
+        },
+
     };
 
 })();

@@ -12,6 +12,23 @@ const board = (() => {
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
 
+    document.addEventListener('keydown', (e) => {
+        switch(e.key) {
+            case 'a':
+                moveTank('LEFT');
+                break;
+            case 'd':
+                moveTank('RIGHT');
+                break;
+            case 'w':
+                moveTank('UP');
+                break;
+            case 's':
+                moveTank('DOWN');
+                break;
+        }
+    });
+
 
     const initializeBoard = async () => {
         try {
@@ -96,13 +113,34 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            initializeBoard(); //Luego se quitara cuando se trate la concurrencia
+            return stompClient.send("/app/newMovement/session/" + session, {});
          } catch (error) {
             alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
     };
 
+    var connectAndSubscribe = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        stompClient = Stomp.over(socket);
+        sessionStorage.setItem('stompClient', stompClient); //guardar el stomp client para no instanciar diferentes clientes.
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            subscription = stompClient.subscribe('/topic/sessions/' + session , function () {
+                initializeBoard();
+            });   
+        });
+    };
+
+    const initGameSession = () => {
+        connectAndSubscribe();
+    };
+
+
     return {
+        init: function(){
+            initGameSession();
+        },
         createPositionFromMovement,
         movePlayer,
         initializeBoard

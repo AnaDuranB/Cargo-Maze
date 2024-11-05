@@ -105,7 +105,6 @@ public class CargoMazeController {
         if (position == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "position is required"));
         }
-        System.out.println("POSICION EN EL CONTROLADOR " + position.getX() + " " + position.getY());
         try {
             if(!cargoMazeServices.movePlayer(nickname, sessionId, position)){
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid move"));
