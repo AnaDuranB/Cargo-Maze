@@ -22,20 +22,14 @@ const sessionMenu = (() => {
         }
     };
 
-    const sendMessage = () => {
-        var message = { content: 'SIRVE' };
-        stompClient.send('/app/sessions', {}, JSON.stringify(message));
-    }
-
     var connectAndSubscribe = function () {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            subscription = stompClient.subscribe('/topic/sessions', function (eventbody) {
-                var theObject=JSON.parse(eventbody.body);
-                console.log(theObject);
+            subscription = stompClient.subscribe('/topic/sessions', function () {
+                //
             });   
         });
     };
@@ -65,9 +59,7 @@ const sessionMenu = (() => {
         connect,
         init : function () {
             initSessionMenu();
-        },
-        sendMessage
-
+        }
     };
 
 })();

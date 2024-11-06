@@ -78,4 +78,12 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         GameSession session = getSession(gameSessionId);
         return session.getPlayers();
     }
+
+    @Override
+    public void removePlayerFromGame(String nickname, String gameSessionId) throws CargoMazePersistanceException {
+        Player player = getPlayer(nickname);
+        GameSession session = getSession(gameSessionId);
+        session.removePlayer(player);
+        
+    }
 }

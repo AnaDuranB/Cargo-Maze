@@ -8,7 +8,6 @@ const login = (() => {
         console.log("Nickname:", nickname);
         try {
             await api.login(nickname);
-            console.log("Player created" + nickname);
             sessionStorage.setItem('nickname', nickname);
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
