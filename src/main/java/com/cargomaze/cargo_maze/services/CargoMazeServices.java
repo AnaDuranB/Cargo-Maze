@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.cargomaze.cargo_maze.model.GameSession;
+import com.cargomaze.cargo_maze.model.GameStatus;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
@@ -38,18 +39,18 @@ public class CargoMazeServices {
     }
 
     public void addNewPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException{
-        GameSession gameSession = persistance.getSession(gameSessionId);
-
-        if (gameSession.getPlayers().size() >= 4) {
-            System.out.println("Session is full");
-            throw new CargoMazePersistanceException(CargoMazePersistanceException.FULL_SESSION_EXCEPTION);
-        }
-        try {
-            persistance.addPlayerToGame(nickname,gameSessionId);
-        } catch (CargoMazePersistanceException e) {
+        GameSession session = persistance.getSession(gameSessionId);
+        Player player = persistance.getPlayer(nickname);
+        if (player == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
-
+        if(!session.getStatus().equals(GameStatus.WAITING_FOR_PLAYERS)){
+            throw new CargoMazePersistanceException("Session is not waiting for players");
+        }
+        if (session.getPlayers().size() >= 4) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.FULL_SESSION_EXCEPTION);
+        }
+        session.addPlayer(player);
     }
 
     public void removePlayerFromGame(String nickname, String gameSessionId) throws CargoMazePersistanceException{

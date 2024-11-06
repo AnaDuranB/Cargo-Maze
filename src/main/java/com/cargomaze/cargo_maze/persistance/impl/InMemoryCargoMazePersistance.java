@@ -32,19 +32,6 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         players.put(player.getNickname(), player);
         System.out.println(player);
     }
-    @Override
-    public void addPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException {
-        GameSession session = getSession(gameSessionId);
-        Player player = players.get(nickname);
-        if (player == null) {
-            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
-        }
-        if(!session.getStatus().equals(GameStatus.WAITING_FOR_PLAYERS)){
-            throw new CargoMazePersistanceException("Session is not waiting for players");
-        }
-        session.addPlayer(player);
-    }
-
 
     @Override
     public Player getPlayer(String playerId) throws CargoMazePersistanceException {

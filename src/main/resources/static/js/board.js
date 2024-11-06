@@ -102,6 +102,7 @@ const board = (() => {
             default:
                 console.log('Dirección inválida:', direction);
                 return;
+                
         }
         let position = new Position(newPosX, newPosY)
         movePlayer(position)
