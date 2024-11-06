@@ -11,6 +11,9 @@ const board = (() => {
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
 
+    document.addEventListener('DOMContentLoaded', (event) => {
+        board.initializeBoard();
+    });
 
     //MOVEMENTS LISTENERS
     document.addEventListener('keydown', (e) => {
@@ -29,6 +32,7 @@ const board = (() => {
                 break;
         }
     });
+
 
     const initializeBoard = async () => {
         try {
@@ -214,7 +218,6 @@ const board = (() => {
         .then(() =>enterSession());
     };
 
-
     return {
         init: function(){
             initGameSession();
@@ -227,5 +230,4 @@ const board = (() => {
     };
 
 })();
-
 board.init();

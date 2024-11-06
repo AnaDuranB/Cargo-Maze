@@ -2,6 +2,11 @@ const login = (() => {
     let nickname = "";
     let api = apiClient;
 
+
+    document.addEventListener('DOMContentLoaded', function() {
+        sessionStorage.clear();
+    });
+
     const login = async (newNickname) => {
         sessionStorage.clear();
         nickname = newNickname;

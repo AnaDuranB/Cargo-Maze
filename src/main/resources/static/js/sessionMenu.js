@@ -4,6 +4,11 @@ const sessionMenu = (() => {
     let stompClient = null;
     let subscription = null;
 
+    document.addEventListener('DOMContentLoaded', (event) => {
+        sessionMenu.updateUserCount();
+    });
+
+
     const enterSession = async (sessionId) => {
         try {
             if (!nickname || nickname.length === 0) {
