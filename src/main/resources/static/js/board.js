@@ -14,7 +14,7 @@ const board = (() => {
 
     //MOVEMENTS LISTENERS
     document.addEventListener('keydown', (e) => {
-        switch(e.key.toLowerCase) {
+        switch(e.key) {
             case 'a':
                 createPositionFromMovement('LEFT');
                 break;
@@ -159,6 +159,7 @@ const board = (() => {
             await stompClient.send("/app/sessions/enterOrExitSession." + session, {});
             unsubscribe();
             await api.removePlayerFromSession(session, nickname);
+            await stompClient.send("/app/sessions" + session, {});
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
