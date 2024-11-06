@@ -16,7 +16,7 @@ public class CargoMazeStompController {
 
     @MessageMapping("/sessions")
     public void handleGameSessionEvent() throws Exception {
-        System.out.println("hola");
+        System.out.println("Game session player in or out event");
         msgt.convertAndSend(topicUri, true);
     }
 

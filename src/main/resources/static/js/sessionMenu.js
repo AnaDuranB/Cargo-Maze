@@ -10,15 +10,13 @@ const sessionMenu = (() => {
                 alert("No se ha ingresado un nickname");
                 return;
             }
-            stompClient.send("/app/sessions", {}); 
             await api.enterSession(sessionId, nickname);
+            stompClient.send("/app/sessions", {}); 
             sessionStorage.setItem('session', sessionId);
             window.location.href = "../templates/game.html";
-
         } catch (error) {
             console.log(error);
-            alert("No se pudo ingresar a la sesión"); //hay que implementar la validacion si el usuario se sale de la sesion
-            // se debe eliminar de la lista de jugadores.
+            alert("No se pudo ingresar a la sesión");
         }
     };
 
@@ -54,21 +52,13 @@ const sessionMenu = (() => {
         console.log("Unsubscribed from the gameSession Topic");
     };
 
-    const connect = () => {
-        if (subscription != null) {
-            subscription.unsubscribe();
-            clearCanvas();
-            connectAndSubscribe();
-        }
-    };
-
     return {
         enterSession,
         unsubscribe,
-        connect,
         init: function () {
             initSessionMenu();
-        }
+        },
+        updateUserCount
     };
 
 })();

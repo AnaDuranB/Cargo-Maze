@@ -10,12 +10,12 @@ const apiClient = (() => {
 
     //GET
 
-    const getGameSessionBoard = async (gameSessionId) =>  {
-        try{
+    const getGameSessionBoard = async (gameSessionId) => {
+        try {
             let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
             return await response.json();
-        }catch(error){
-            console.error("Error searching for gameSession by id",error);
+        } catch (error) {
+            console.error("Error searching for gameSession by id", error);
         }
     }
 
@@ -36,11 +36,11 @@ const apiClient = (() => {
             console.log("Error retrieving player count in session:", error);
         }
     };
-    
+
     //POST
 
     const login = async (nickname) => {
-        let json = JSON.stringify({nickname: nickname });
+        let json = JSON.stringify({ nickname: nickname });
         let promise = $.ajax({
             url: url + "players",
             type: "POST",
@@ -51,28 +51,21 @@ const apiClient = (() => {
     };
 
     //PUT
-    
+
     const enterSession = async (gameSessionId, nickname) => {
         let json = JSON.stringify({ nickname: nickname });
-
-        try {
-            let response = await $.ajax({
-                url: url + "sessions/" + gameSessionId + "/players",
-                type: 'PUT',
-                data: json,
-                contentType: "application/json"
-            });
-            console.log(response); // Log successful response
-            return response; // Return the response to the caller
-        } catch (error) {
-            console.error(`Error entering session: ${error.responseText || error.message}`);
-        }
+        let response = await $.ajax({
+            url: url + "sessions/" + gameSessionId + "/players",
+            type: 'PUT',
+            data: json,
+            contentType: "application/json"
+        });
+        return response; // Return the response to the caller
     };
 
-    
+
     const movePlayer = async (gameSessionId, nickname, newPosition) => {
-        let json = JSON.stringify({"x": newPosition.x, "y": newPosition.y});
-        console.log(json);
+        let json = JSON.stringify({ "x": newPosition.x, "y": newPosition.y });
         try {
             let response = await $.ajax({
                 url: url + "sessions/" + gameSessionId + "/players/" + nickname + "/move",
