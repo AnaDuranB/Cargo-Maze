@@ -11,6 +11,17 @@ const board = (() => {
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
 
+    /* Escucha el evento `beforeunload` para detectar cuando el usuario intenta salir de la página.
+    window.addEventListener('beforeunload', async (event) => {
+        await board.exitFromGameSession();
+    });
+
+    // Escucha el evento `popstate` para detectar cambios en el historial, como cuando se presiona el botón "Atrás".
+    window.addEventListener('popstate', async (event) => {
+        await board.exitFromGameSession();
+    });
+    */
+
     document.addEventListener('DOMContentLoaded', (event) => {
         board.initializeBoard();
     });
@@ -72,11 +83,21 @@ const board = (() => {
                         break;
                     case 'T':
                         cellDiv.classList.add('goal');
-                        cellDiv.innerText = '⭐'; 
+                        cellDiv.style.backgroundColor = 'yellow'; 
                         break;
                     case 'P':
                         cellDiv.classList.add('player');
                         cellDiv.innerText = '😃';
+                        break;
+                    case 'BT':
+                        cellDiv.classList.add('boxtarget');
+                        cellDiv.innerText = '📦';
+                        cellDiv.style.backgroundColor = 'yellow'; 
+                        break;
+                    case 'PT':
+                        cellDiv.classList.add('player target');
+                        cellDiv.innerText = '😃';
+                        cellDiv.style.backgroundColor = 'yellow'; 
                         break;
                 }
 

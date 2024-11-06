@@ -1,5 +1,6 @@
 package com.cargomaze.cargo_maze.model;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,6 +46,7 @@ public class GameSession {
 
     private void assignPlayerStartPosition(Player player) {
         Position startPosition = board.getPlayerStartPosition(player.getIndex());
+        System.out.println("Player " + player.getNickname() + " starts at " + startPosition);
         player.updatePosition(startPosition);
         board.setPlayerInBoard(startPosition);
     }
@@ -57,6 +59,8 @@ public class GameSession {
                 try {
                     box.move(boxNewPosition); // se cambia el lugar donde esta la caja
                     board.getCellAt(boxNewPosition).setState(Cell.BOX); // se cambia el estado de la celda
+                    //board.verifyBoxAtTarget(box);
+                    //updateGameStatus();
                 } finally {
                     box.lock.unlock(); // se desbloquean los elementos accedidos
                     board.getCellAt(boxNewPosition).lock.unlock();
@@ -68,6 +72,7 @@ public class GameSession {
         }
         return false;
     }
+
 
     private boolean isValidPlayerMove(Position currentPosition, Position newPosition){
         return currentPosition.isAdjacent(newPosition) && board.isValidPosition(newPosition) && !board.hasWallAt(newPosition) && !board.isPlayerAt(newPosition);
@@ -135,6 +140,7 @@ public class GameSession {
 
     public void updateGameStatus() {
         if (board.isComplete()) {
+            System.out.println("Game completed");
             status = GameStatus.COMPLETED;
         }
     }
@@ -167,6 +173,7 @@ public class GameSession {
     }
 
     public void removePlayer(Player player) {
+        System.out.println("Removing player " + player.getNickname());
         board.setCellState(player.getPosition(), Cell.EMPTY);
         players.remove(player);
         player.setIndex(-1);

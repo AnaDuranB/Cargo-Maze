@@ -73,15 +73,18 @@ public class Board {
     }
 
     public boolean hasWallAt(Position position) {
-        return cells[position.getX()][position.getY()].getState() == Cell.WALL;
+        String state= cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.WALL);
     }
 
     public boolean hasBoxAt(Position position) {
-        return cells[position.getX()][position.getY()].getState() == Cell.BOX;
+        String state= cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.BOX) || state.equals(Cell.BOX_ON_TARGET);
     }
 
     public boolean isPlayerAt(Position position){
-        return cells[position.getX()][position.getY()].getState() == Cell.PLAYER;
+        String state = cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.PLAYER) || state.equals(Cell.PLAYER_ON_TARGET);
     }
 
     public Box getBoxAt(Position position) {
@@ -98,6 +101,20 @@ public class Board {
     public boolean isComplete() {
         return boxes.stream().allMatch(Box::isAtTarget);
     }
+
+    public void verifyBoxAtTarget(Box box){
+        boolean flag = true;
+        int counter = 0;
+        while(flag){
+            if(targetPositions.get(counter).equals(box.getPosition())){
+                box.setAtTarget(true);
+                flag = false;
+            }
+        }
+        if(flag){
+            box.setAtTarget(false);
+        }
+    }   
 
     private void addTarget(Position position) {
         cells[position.getX()][position.getY()] = new Cell(Cell.TARGET);;
@@ -136,6 +153,8 @@ public class Board {
             case Cell.TARGET: return "T";
             case Cell.PLAYER: return "P";
             case Cell.BOX: return "B";
+            case Cell.BOX_ON_TARGET: return "BT";
+            
             default: return "?";
         }
     }
