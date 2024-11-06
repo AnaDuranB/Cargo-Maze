@@ -5,7 +5,8 @@ se resuelva, es decir, esperar a que los datos lleguen del servidor.
 
 const apiClient = (() => {
 
-    const url = "http://localhost:8080/cargoMaze/";
+    //const url = "http://localhost:8080/cargoMaze/";
+    const url = "http://cargo-maze-ede0gxc3fcc6hfe9.canadacentral-01.azurewebsites.net"
 
     const login = async (nickname) => {
         let json = JSON.stringify({nickname: nickname });
