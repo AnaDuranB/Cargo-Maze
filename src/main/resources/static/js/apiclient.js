@@ -12,8 +12,7 @@ const apiClient = (() => {
     const getGameSessionBoard = async (gameSessionId) =>  {
         try{
             let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
-            let data = response.json;
-            return data;
+            return await response.json();
         }catch(error){
             console.error("Error searching for gameSession by id",error);
         }
@@ -22,8 +21,7 @@ const apiClient = (() => {
     const getPlayersInSession = async (gameSessionId) => {
         try {
             let response = await fetch(`${url}sessions/${gameSessionId}/players`);
-            let data = response.json();
-            return data;
+            return await response.json();
         } catch (error) {
             console.error("Error retrieving players in session:", error);
         }
@@ -67,8 +65,6 @@ const apiClient = (() => {
             return response; // Return the response to the caller
         } catch (error) {
             console.error(`Error entering session: ${error.responseText || error.message}`);
-            // Optionally handle error UI here
-            throw error; // Rethrow the error for further handling if needed
         }
     };
 

@@ -33,6 +33,7 @@ const board = (() => {
     const initializeBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
+            console.log("BoardArray:", boardArray, "Type:", typeof boardArray);
             generateBoard(boardArray);
         } catch (error) {
             console.log("Error al obtener el tablero de la sesión:", error);
