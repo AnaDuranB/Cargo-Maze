@@ -105,7 +105,7 @@ const board = (() => {
         }
         let position = new Position(newPosX, newPosY)
         movePlayer(position)
-        
+    
     };
 
     const movePlayer = async (position) => {
@@ -157,9 +157,9 @@ const board = (() => {
     const exitFromGameSession = async () => {
         try {
             await stompClient.send("/app/sessions/enterOrExitSession." + session, {});
-            unsubscribe();
             await api.removePlayerFromSession(session, nickname);
-            await stompClient.send("/app/sessions" + session, {});
+            await stompClient.send("/app/sessions", {});
+            unsubscribe();
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
@@ -170,12 +170,14 @@ const board = (() => {
     const enterSession = () => {
         return stompClient.send("/app/sessions/enterOrExitSession." + session, {}); 
     };
+
     //STOMP FUNCTIONS
     let stompClient = null;
     let subscription = null;
 
     const connectAndSubscribe = async function () {
         await new Promise((resolve, reject) => {
+            console.info('Connecting to WS...');
             let socket = new SockJS('/stompendpoint');
             stompClient = Stomp.over(socket);
             stompClient.connect({}, function (frame) {
@@ -191,7 +193,6 @@ const board = (() => {
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/updateBoard", function (eventbody) {
                 initializeBoard();
             });
-
             resolve();
             }, function (error) {
             reject(error);
