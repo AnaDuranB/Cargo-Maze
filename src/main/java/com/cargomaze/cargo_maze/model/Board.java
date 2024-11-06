@@ -150,6 +150,10 @@ public class Board {
         return cells[position.getX()][position.getY()];
     }
 
+    public void setCellState(Position position, String state){
+        cells[position.getX()][position.getY()].setState(state);
+    }
+
     public String[][] getBoardState(){
         String[][] boardState = new String[HEIGHT][WIDTH];
         for (int y = 0; y < HEIGHT; y++) {

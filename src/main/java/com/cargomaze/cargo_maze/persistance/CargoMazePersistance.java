@@ -14,6 +14,8 @@ public interface CargoMazePersistance {
 
     public Player getPlayer(String playerId) throws CargoMazePersistanceException;
 
+    public Player getPlayer(String playerId, String gameSession) throws CargoMazePersistanceException;
+
     public void addSession(GameSession session) throws CargoMazePersistanceException;
 
     public GameSession getSession(String gameSessionId) throws CargoMazePersistanceException;

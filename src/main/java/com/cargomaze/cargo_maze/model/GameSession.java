@@ -31,7 +31,7 @@ public class GameSession {
             return false;
         }
         player.setIndex(players.size());
-        player.setGameSession(this);
+        player.setGameSession(sessionId);
         player.setReady(true);
         players.add(player);
         assignPlayerStartPosition(player);
@@ -131,11 +131,6 @@ public class GameSession {
         if (players.size() == 4 && players.stream().allMatch(Player::isReady)) {
             status = GameStatus.IN_PROGRESS;
         }
-        System.out.println(players.size() == 4);
-        System.out.println(players.stream().allMatch(Player::isReady));
-        for (Player player : players) {
-            System.out.println(player.getNickname() + " " + player.isReady());
-        }
     }
 
     public void updateGameStatus() {
@@ -179,7 +174,10 @@ public class GameSession {
     }
 
     public void removePlayer(Player player) {
+        board.setCellState(player.getPosition(), Cell.EMPTY);
         players.remove(player);
+        player.setIndex(-1);
+        player.updatePosition(null);
     }
 }
 

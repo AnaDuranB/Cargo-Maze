@@ -78,19 +78,35 @@ const apiClient = (() => {
                 data: json,
                 contentType: "application/json"
             });
+            return response; // Return the response to the caller
+        } catch (error) {
+            console.log(`Error moving: ${error.responseText || error.message}`);
+        }
+    };
+
+    const removePlayerFromSession = async (gameSessionId, nickname) => {
+        let json = JSON.stringify({ nickname: nickname, gameSessionId: gameSessionId });
+        try {
+            let response = await $.ajax({
+                url: url + "sessions/" + gameSessionId + "/players/" + nickname,
+                type: 'DELETE',
+                data: json,
+                contentType: "application/json"
+            });
             console.log(response); // Log successful response
             return response; // Return the response to the caller
         } catch (error) {
-            console.log(`Error entering session: ${error.responseText || error.message}`);
+            console.error(`Error removing player from session: ${error.responseText || error.message}`);
         }
-    };
+    }
 
     return {
         login,
         getGameSessionBoard,
         enterSession,
         getPlayersInSession,
-        movePlayer
+        movePlayer,
+        removePlayerFromSession
 
     };
 

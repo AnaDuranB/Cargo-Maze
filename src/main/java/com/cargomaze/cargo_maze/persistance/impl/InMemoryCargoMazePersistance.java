@@ -2,6 +2,7 @@ package com.cargomaze.cargo_maze.persistance.impl;
 
 
 import com.cargomaze.cargo_maze.model.GameSession;
+import com.cargomaze.cargo_maze.model.GameStatus;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.CargoMazePersistance;
 import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
@@ -37,6 +38,9 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         Player player = players.get(nickname);
         if (player == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+        if(!session.getStatus().equals(GameStatus.WAITING_FOR_PLAYERS)){
+            throw new CargoMazePersistanceException("Session is not waiting for players");
         }
         session.addPlayer(player);
     }
@@ -84,6 +88,20 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         Player player = getPlayer(nickname);
         GameSession session = getSession(gameSessionId);
         session.removePlayer(player);
+        player.setGameSession(null);
+        System.out.println(session.getPlayers().size());
         
+    }
+
+    @Override
+    public Player getPlayer(String playerId, String gameSession) throws CargoMazePersistanceException {
+        Player player = players.get(playerId);
+        if(player == null){
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+        if(player.getGameSession() == null || !player.getGameSession().equals(gameSession)){
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
+        }
+        return player;
     }
 }

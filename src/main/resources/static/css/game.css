@@ -124,3 +124,13 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
+
+button.red-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: red;
+    color: white; /* Para que el texto sea visible sobre el fondo rojo */
+    border: none; /* Opcional: para quitar el borde del botón */
+    border-radius: 4px; /* Opcional: para redondear los bordes del botón */
+}

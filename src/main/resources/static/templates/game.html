@@ -10,7 +10,6 @@
   <script src="/webjars/sockjs-client/sockjs.min.js"></script>
   <script src="/webjars/stomp-websocket/stomp.min.js"></script>
   <script src="../js/apiclient.js"></script>
-  <script src="../js/players.js"></script>
   <script src="../js/board.js"></script>
 </head>
 
@@ -37,6 +36,7 @@
       <button onclick="board.createPositionFromMovement('LEFT')">Izquierda</button>
       <button onclick="board.createPositionFromMovement('RIGHT')">Derecha</button>
       <button onclick="board.createPositionFromMovement('DOWN')">Abajo</button>
+      <button class="red-button" onclick="board.exitFromGameSession()">SALIR</button>
     </div>
 
     <!-- Panel de Jugadores -->
@@ -49,7 +49,7 @@
   <script>
     // Llamar a initializeBoard cuando la página se cargue
     document.addEventListener('DOMContentLoaded', (event) => {
-        board.updateGameBoard();
+        board.initializeBoard();
     });
   </script>
 </body>

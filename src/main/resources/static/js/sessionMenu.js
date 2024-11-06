@@ -12,7 +12,6 @@ const sessionMenu = (() => {
             }
             await api.enterSession(sessionId, nickname);
             sessionStorage.setItem('session', sessionId);
-
             window.location.href = "../templates/game.html";
 
         } catch (error) {
