@@ -5,7 +5,7 @@ public class Player{
     private String nickname;
     private Position position;
     private boolean isReady;
-    private GameSession gameSession = null; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
+    private String gameSessionId = null; // no se sabe si es necesario (si se crean servicios directos del game session en teoria no)
 
     public Player(String nickname) {
         this.nickname = nickname;
@@ -13,8 +13,8 @@ public class Player{
         this.index = -1;
     }
 
-    public void setGameSession(GameSession gameSession) {
-        this.gameSession = gameSession;
+    public void setGameSession(String newGameSessionId) {
+        this.gameSessionId = newGameSessionId;
     }
 
     public void setReady(boolean ready) {
@@ -42,5 +42,9 @@ public class Player{
 
     public int getIndex() {
         return index;
+    }
+
+    public String getGameSession() {
+        return gameSessionId;
     }
 }

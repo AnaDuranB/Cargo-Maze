@@ -7,11 +7,12 @@ const board = (() => {
         }        
     }
 
-
     const api = apiClient;
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
 
+
+    //MOVEMENTS LISTENERS
     document.addEventListener('keydown', (e) => {
         switch(e.key) {
             case 'a':
@@ -29,8 +30,7 @@ const board = (() => {
         }
     });
 
-
-    const updateGameBoard = async () => {
+    const initializeBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             generateBoard(boardArray);
@@ -116,30 +116,99 @@ const board = (() => {
          }
     };
 
+    //PLAYERS PANEL FUNCIONALITY
 
-    var connectAndSubscribe = function () {
-        console.info('Connecting to WS...');
-        var socket = new SockJS('/stompendpoint');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function (frame) {
-            console.log('Connected: ' + frame);
-            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function (eventbody) {
-                let json = JSON.parse(eventbody.body);
-                if(json){
-                    updateGameBoard();
-                }
-               
-            });
-            
-            subscription = stompClient.subscribe('/topic/sessions/' + session + "/update" , function (eventbody) {
-                //update panels method
-            });
-        });
-
+    const initializeGameSession = async () => {
+        try {
+            if (!nickname || !session) {
+                console.error("Nickname o Game Session ID no encontrados.");
+                return;
+            }
+            await updatePlayerList(session);
+        } catch (error) {
+            console.error("Error initializing game session:", error);
+        }
     };
 
-    const initGameSession = () => {
-        connectAndSubscribe();
+    const updatePlayerList = async (session) => {
+        try {
+            const players = await api.getPlayersInSession(session);
+            const playerList = document.getElementById("player-list");
+
+            const existingNicknames = Array.from(playerList.children).map(item => item.textContent);
+            
+            const newNicknames = players.map(player => player.nickname);
+            const hasChanges = existingNicknames.length !== newNicknames.length ||
+                !newNicknames.every(nickname => existingNicknames.includes(nickname));
+
+            if (!hasChanges) return;
+            playerList.innerHTML = "";
+            players.forEach(player => {
+                const listItem = document.createElement("li");
+                listItem.textContent = player.nickname;
+                playerList.appendChild(listItem);
+            });
+        } catch (error) {
+            console.error("Error updating player list:", error);
+        }
+    };
+
+    const exitFromGameSession = async () => {
+        try {
+            await stompClient.send("/app/sessions/enterOrExitSession." + session, {});
+            unsubscribe();
+            await api.removePlayerFromSession(session, nickname);
+            sessionStorage.removeItem('session');
+            window.location.href = "../templates/sessionMenu.html";
+        } catch (error) {
+            console.log("Error al salir de la sesión:", error);
+        }
+    };
+
+    const enterSession = () => {
+        return stompClient.send("/app/sessions/enterOrExitSession." + session, {}); 
+    };
+    //STOMP FUNCTIONS
+    let stompClient = null;
+    let subscription = null;
+
+    const connectAndSubscribe = async function () {
+        await new Promise((resolve, reject) => {
+            let socket = new SockJS('/stompendpoint');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move", function (eventbody) {
+                initializeBoard();
+            });
+
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/updatePlayerList", function (eventbody) {
+                updatePlayerList(session);
+            });
+
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/updateBoard", function (eventbody) {
+                initializeBoard();
+            });
+
+            resolve();
+            }, function (error) {
+            reject(error);
+            console.log("STOMP error");
+            });
+        });
+    };
+
+    const unsubscribe = () => {
+        if (subscription !== null) {
+            subscription.unsubscribe();
+        }
+        console.log("Unsubscribed from the gameSession Topic");
+    };
+
+    const initGameSession = async () => {
+        connectAndSubscribe()
+        .then(() => initializeGameSession())
+        .then(() =>enterSession());
     };
 
 
@@ -149,7 +218,9 @@ const board = (() => {
         },
         createPositionFromMovement,
         movePlayer,
-        updateGameBoard
+        initializeBoard,
+        exitFromGameSession,
+        initializeGameSession
     };
 
 })();
