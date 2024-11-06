@@ -1,5 +1,6 @@
 package com.cargomaze.cargo_maze.controller;
 
+import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.exceptions.*;
 import jakarta.servlet.http.HttpSession;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
 
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
@@ -99,13 +101,20 @@ public class CargoMazeController {
             return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         }
     }
-
+    @GetMapping("/sessions/{id}/players")
+    public ResponseEntity<?> getPlayersInSession(@PathVariable String id) {
+        try {
+            List<Player> players = cargoMazeServices.getPlayersInSession(id);
+            return new ResponseEntity<>(players, HttpStatus.OK);
+        } catch (CargoMazePersistanceException ex) {
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
     @PutMapping("/sessions/{sessionId}/players/{nickname}/move")
     public ResponseEntity<?> movePlayer(@RequestBody Position position, @PathVariable String sessionId, @PathVariable String nickname) {
         if (position == null) {
             return ResponseEntity.badRequest().body(Map.of("error", "position is required"));
         }
-        System.out.println("POSICION EN EL CONTROLADOR " + position.getX() + " " + position.getY());
         try {
             if(!cargoMazeServices.movePlayer(nickname, sessionId, position)){
                 return ResponseEntity.badRequest().body(Map.of("error", "Invalid move"));

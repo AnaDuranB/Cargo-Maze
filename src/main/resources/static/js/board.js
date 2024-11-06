@@ -12,8 +12,25 @@ const board = (() => {
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
 
+    document.addEventListener('keydown', (e) => {
+        switch(e.key) {
+            case 'a':
+                createPositionFromMovement('LEFT');
+                break;
+            case 'd':
+                createPositionFromMovement('RIGHT');
+                break;
+            case 'w':
+                createPositionFromMovement('UP');
+                break;
+            case 's':
+                createPositionFromMovement('DOWN');
+                break;
+        }
+    });
 
-    const initializeBoard = async () => {
+
+    const updateGameBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             console.log(boardArray);
@@ -96,16 +113,47 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            initializeBoard(); //Luego se quitara cuando se trate la concurrencia
+            var message = { content: 'Jugador ' + nickname + ' se ha movido' };
+            return stompClient.send("/app/sessions/move." + session, {}, JSON.stringify(message)); 
          } catch (error) {
             alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
     };
 
+
+    var connectAndSubscribe = function () {
+        console.info('Connecting to WS...');
+        var socket = new SockJS('/stompendpoint');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function (eventbody) {
+                var theObject=JSON.parse(eventbody.body);
+                console.log(theObject);
+                updateGameBoard();
+            });
+            
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/update" , function (eventbody) {
+                //update panels method
+            });
+        });
+
+    };
+
+    const initGameSession = () => {
+        connectAndSubscribe();
+    };
+
+
     return {
+        init: function(){
+            initGameSession();
+        },
         createPositionFromMovement,
         movePlayer,
-        initializeBoard
+        updateGameBoard
     };
 
 })();
+
+board.init();

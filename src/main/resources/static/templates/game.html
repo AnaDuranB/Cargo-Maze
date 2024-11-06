@@ -7,7 +7,10 @@
   <title>Cargo Maze</title>
   <link rel="stylesheet" href="../css/game.css">
   <script src="/webjars/jquery/3.1.0/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
   <script src="../js/apiclient.js"></script>
+  <script src="../js/players.js"></script>
   <script src="../js/board.js"></script>
 </head>
 
@@ -40,16 +43,13 @@
     <div id="player-panel" class="player-panel">
       <h2>Jugadores</h2>
       <ul id="player-list">
-        <li>List Item1</li>
-        <li>List Item2</li>
-        <li>List Item3</li>
       </ul>
     </div>
   </div>
   <script>
     // Llamar a initializeBoard cuando la página se cargue
     document.addEventListener('DOMContentLoaded', (event) => {
-        board.initializeBoard();
+        board.updateGameBoard();
     });
   </script>
 </body>

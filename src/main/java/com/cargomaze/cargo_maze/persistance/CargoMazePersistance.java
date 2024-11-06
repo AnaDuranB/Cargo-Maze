@@ -5,6 +5,8 @@ import com.cargomaze.cargo_maze.model.GameSession;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.persistance.exceptions.*;
 
+import java.util.List;
+
 
 public interface CargoMazePersistance {
 
@@ -17,5 +19,7 @@ public interface CargoMazePersistance {
     public GameSession getSession(String gameSessionId) throws CargoMazePersistanceException;
     public int getPlayerCount(String gameSessionId) throws CargoMazePersistanceException;
     public void addPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException;
+    public List<Player> getPlayersInSession(String id) throws CargoMazePersistanceException;
+
 
 }
