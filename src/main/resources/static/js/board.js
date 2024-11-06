@@ -14,7 +14,7 @@ const board = (() => {
 
     //MOVEMENTS LISTENERS
     document.addEventListener('keydown', (e) => {
-        switch(e.key) {
+        switch(e.key.toLowerCase) {
             case 'a':
                 createPositionFromMovement('LEFT');
                 break;
@@ -33,7 +33,6 @@ const board = (() => {
     const initializeBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
-            console.log("BoardArray:", boardArray, "Type:", typeof boardArray);
             generateBoard(boardArray);
         } catch (error) {
             console.log("Error al obtener el tablero de la sesión:", error);
@@ -102,7 +101,7 @@ const board = (() => {
             default:
                 console.log('Dirección inválida:', direction);
                 return;
-                
+
         }
         let position = new Position(newPosX, newPosY)
         movePlayer(position)
