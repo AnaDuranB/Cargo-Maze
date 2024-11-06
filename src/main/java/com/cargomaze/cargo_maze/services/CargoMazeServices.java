@@ -46,7 +46,6 @@ public class CargoMazeServices {
         }
         try {
             persistance.addPlayerToGame(nickname,gameSessionId);
-
         } catch (CargoMazePersistanceException e) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }

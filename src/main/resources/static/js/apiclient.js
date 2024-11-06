@@ -5,8 +5,7 @@ se resuelva, es decir, esperar a que los datos lleguen del servidor.
 
 const apiClient = (() => {
 
-    //const url = "http://localhost:8080/cargoMaze/";
-    const url = "https://cargo-maze-ede0gxc3fcc6hfe9.canadacentral-01.azurewebsites.net/cargoMaze/"
+    const url = "http://localhost:8080/cargoMaze/";
 
     //GET
 
@@ -62,7 +61,6 @@ const apiClient = (() => {
                 data: json,
                 contentType: "application/json"
             });
-            console.log(response); // Log successful response
             return response; // Return the response to the caller
         } catch (error) {
             console.error(`Error entering session: ${error.responseText || error.message}`);

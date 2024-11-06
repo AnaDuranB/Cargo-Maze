@@ -54,21 +54,13 @@ const sessionMenu = (() => {
         console.log("Unsubscribed from the gameSession Topic");
     };
 
-    const connect = () => {
-        if (subscription != null) {
-            subscription.unsubscribe();
-            clearCanvas();
-            connectAndSubscribe();
-        }
-    };
-
     return {
         enterSession,
         unsubscribe,
-        connect,
         init: function () {
             initSessionMenu();
-        }
+        },
+        updateUserCount
     };
 
 })();

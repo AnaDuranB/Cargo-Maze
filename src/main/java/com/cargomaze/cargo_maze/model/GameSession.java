@@ -139,14 +139,7 @@ public class GameSession {
         }
     }
 
-    private Player findPlayerByName(String playerName) {
-        return players.stream()
-                .filter(p -> p.getNickname().equals(playerName))
-                .findFirst()
-                .orElse(null);
-    }
-
-    private Player findPlayerByIndex(Player player) {
+    public Player findPlayerByIndex(Player player) {
         if(players.isEmpty()){
             return null;
         }
