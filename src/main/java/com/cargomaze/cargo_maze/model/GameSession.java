@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-
-
 public class GameSession {
     private String sessionId;
     private List<Player> players;
@@ -178,6 +176,10 @@ public class GameSession {
 
     public String[][] getBoardState(){
         return board.getBoardState();
+    }
+
+    public void removePlayer(Player player) {
+        players.remove(player);
     }
 }
 

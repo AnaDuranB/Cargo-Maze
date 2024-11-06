@@ -33,24 +33,21 @@ const board = (() => {
     const updateGameBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
-            console.log(boardArray);
             generateBoard(boardArray);
         } catch (error) {
-            console.error("Error al obtener el tablero de la sesión:", error);
+            console.log("Error al obtener el tablero de la sesión:", error);
         }
     }
 
     const generateBoard = (boardArray) => {
         const gameBoard = document.getElementById('game-board');
         if (!gameBoard) {
-            console.error("El elemento game-board no se encontró en el DOM");
+            console.log("El elemento game-board no se encontró en el DOM");
             return;
         }
 
         // Limpiar el tablero antes de generarlo
         gameBoard.innerHTML = '';
-
-        console.log(typeof(boardArray));
         boardArray.forEach(row => {
             row.forEach(cell => {
                 const cellDiv = document.createElement('li');
@@ -102,7 +99,7 @@ const board = (() => {
                 newPosY += 1;
                 break;
             default:
-                console.error('Dirección inválida:', direction);
+                console.log('Dirección inválida:', direction);
                 return;
         }
         let position = new Position(newPosX, newPosY)
@@ -113,10 +110,9 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            var message = { content: 'Jugador ' + nickname + ' se ha movido' };
-            return stompClient.send("/app/sessions/move." + session, {}, JSON.stringify(message)); 
+            return stompClient.send("/app/sessions/move." + session, {}); 
          } catch (error) {
-            alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
+            //alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
     };
 
@@ -128,9 +124,11 @@ const board = (() => {
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/move" , function (eventbody) {
-                var theObject=JSON.parse(eventbody.body);
-                console.log(theObject);
-                updateGameBoard();
+                let json = JSON.parse(eventbody.body);
+                if(json){
+                    updateGameBoard();
+                }
+               
             });
             
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/update" , function (eventbody) {

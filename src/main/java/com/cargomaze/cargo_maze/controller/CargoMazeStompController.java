@@ -13,19 +13,17 @@ public class CargoMazeStompController {
     private SimpMessagingTemplate msgt;
 
     @MessageMapping("/sessions")
-    public void handleGameSessionEvent(String message) throws Exception {
-        msgt.convertAndSend("/topic/sessions", message);
+    public void handleGameSessionEvent() throws Exception {
+        msgt.convertAndSend("/topic/sessions", true);
     }
 
     @MessageMapping("/sessions/updateBoard.{gameSessionId}")
     public void handleGeneralGameBoardEvent(@DestinationVariable String gameSessionId) throws Exception {
-        msgt.convertAndSend("/topic/sessions/" + gameSessionId + "/update");
+        msgt.convertAndSend("/topic/sessions/" + gameSessionId + "/update", true);
     }
 
     @MessageMapping("/sessions/move.{gameSessionId}")
-    public void handleMoveEvent(@DestinationVariable String gameSessionId, String message) throws Exception {
-        System.out.println("LLEGO EL MENSAJE: " + message + " PARA LA SESION: " + gameSessionId);
-        System.out.println("URI: " + "/topic/sessions/" + gameSessionId + "/move");
-        msgt.convertAndSend("/topic/sessions/" + gameSessionId + "/move", message);
+    public void handleMoveEvent(@DestinationVariable String gameSessionId) throws Exception {
+        msgt.convertAndSend("/topic/sessions/" + gameSessionId + "/move", true);
     }
 }

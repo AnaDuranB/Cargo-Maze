@@ -17,9 +17,14 @@ public interface CargoMazePersistance {
     public void addSession(GameSession session) throws CargoMazePersistanceException;
 
     public GameSession getSession(String gameSessionId) throws CargoMazePersistanceException;
+
     public int getPlayerCount(String gameSessionId) throws CargoMazePersistanceException;
+
     public void addPlayerToGame(String nickname, String gameSessionId) throws CargoMazePersistanceException;
+    
     public List<Player> getPlayersInSession(String id) throws CargoMazePersistanceException;
+
+    public void removePlayerFromGame(String nickname, String gameSessionId) throws CargoMazePersistanceException;
 
 
 }

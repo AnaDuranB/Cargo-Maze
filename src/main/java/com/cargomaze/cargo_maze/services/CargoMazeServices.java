@@ -41,6 +41,7 @@ public class CargoMazeServices {
         GameSession gameSession = persistance.getSession(gameSessionId);
 
         if (gameSession.getPlayers().size() >= 4) {
+            System.out.println("Session is full");
             throw new CargoMazePersistanceException(CargoMazePersistanceException.FULL_SESSION_EXCEPTION);
         }
         try {
@@ -51,6 +52,12 @@ public class CargoMazeServices {
         }
 
     }
+
+    public void removePlayerFromGame(String nickname, String gameSessionId) throws CargoMazePersistanceException{
+        persistance.removePlayerFromGame(nickname,gameSessionId);
+
+    }
+
     public List<Player> getPlayersInSession(String gameSessionId) throws CargoMazePersistanceException {
         return persistance.getPlayersInSession(gameSessionId);
     }
@@ -81,10 +88,7 @@ public class CargoMazeServices {
         Player player = persistance.getPlayer(playerId);
         GameSession gameSession = persistance.getSession(gameSessionId); 
         Position newPosition = new Position(player.getPosition().getX() + direction.getX(), player.getPosition().getY() + direction.getY());
-        System.out.println("POSICION EN EL SERVICIO " + newPosition.getX() + " " + newPosition.getY());
-        boolean result = gameSession.movePlayer(player, newPosition);
-        System.out.println("RESULTADO DEL MOVIMIENTO " + result);
-        return result;
+        return gameSession.movePlayer(player, newPosition);
     }
 }
 
