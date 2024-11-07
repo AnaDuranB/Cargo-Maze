@@ -31,8 +31,8 @@ body {
 .container {
     display: grid;
     grid-template-areas:
-        "board game-status"
-        "controls player-panel";
+        "board player-panel"
+        "controls game-status";
     grid-template-columns: 2fr 1fr;
     gap: 20px;
     width: 80%;
@@ -82,10 +82,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    /* justify-content: center; */
 }
 
+.player-panel h2{
+    margin-top: 15px;
+}
 .player-panel ul li{
+    margin-top: 15px;
     font-family: Arial, sans-serif;
     /* font-weight: bold; */
 }

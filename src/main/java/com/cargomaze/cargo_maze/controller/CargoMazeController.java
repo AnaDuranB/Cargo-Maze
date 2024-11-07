@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
 import com.cargomaze.cargo_maze.services.exceptions.CargoMazeServicesException;
 
-import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 
 @RestController
 @RequestMapping("/cargoMaze")
@@ -154,7 +152,7 @@ public class CargoMazeController {
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("message", "Game session reset", "sessionId", id));
         } catch (CargoMazePersistanceException | CargoMazeServicesException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
-    }
+        }
 }
 
 }
