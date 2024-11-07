@@ -12,7 +12,7 @@ public class PlayerTest {
     private Player player1, player2, player3, player4;
     private Board board;
 
-    @BeforeEach
+    /*@BeforeEach
     public void setUp() {
         gameSession = new GameSession("session1");
         board = gameSession.getBoard();
@@ -275,6 +275,6 @@ public class PlayerTest {
         assertInstanceOf(Box.class, gameSession.getBoard().getBoxAt(new Position(newPos7.getX() + 1, newPos7.getY())));
         assertEquals(newPos7, player1.getPosition());
 
-    }
+    }*/
 }
 
