@@ -23,7 +23,6 @@ public class GameSession {
         if(players.size() == 4 && players.stream().allMatch(Player::isReady)){
             status = GameStatus.IN_PROGRESS;
         }
-        System.out.println(status);
     }
 
     public boolean addPlayer(Player player) {
@@ -45,7 +44,6 @@ public class GameSession {
 
     private void assignPlayerStartPosition(Player player) {
         Position startPosition = board.getPlayerStartPosition(player.getIndex());
-        System.out.println("Player " + player.getNickname() + " starts at " + startPosition);
         player.updatePosition(startPosition);
         board.setPlayerInBoard(startPosition);
     }
@@ -148,7 +146,6 @@ public class GameSession {
 
     public void updateGameStatus() {
         if (board.isComplete()) {
-            System.out.println("Game completed");
             status = GameStatus.COMPLETED;
         }
     }

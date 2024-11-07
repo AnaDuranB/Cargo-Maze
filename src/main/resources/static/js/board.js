@@ -58,7 +58,7 @@ const board = (() => {
                 resetSession();
             }
         } catch (error) {
-            console.log("Error al obtener el estado de la sesión:");
+            console.log("Error al obtener el estado de la sesión:", error.status);
         }
     };
 
@@ -67,7 +67,7 @@ const board = (() => {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             generateBoard(boardArray);
         } catch (error) {
-            console.log("Error al obtener el tablero de la sesión:", error);
+            console.log("Error al obtener el tablero de la sesión:", error.status);
         }
     }
 
@@ -155,7 +155,7 @@ const board = (() => {
             await stompClient.send("/app/sessions/move." + session, {});
             getSessionState();
         } catch (error) {
-            //alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
+            console.log("Error al mover el jugador:", error.status);
         }
     };
 
@@ -164,12 +164,12 @@ const board = (() => {
     const initializeGameSession = async () => {
         try {
             if (!nickname || !session) {
-                console.error("Nickname o Game Session ID no encontrados.");
+                console.log("Nickname o Game Session ID no encontrados.");
                 return;
             }
             await updatePlayerList(session);
         } catch (error) {
-            console.error("Error initializing game session:", error);
+            console.log("Error initializing game session:", error.status);
         }
     };
 
@@ -192,7 +192,7 @@ const board = (() => {
                 playerList.appendChild(listItem);
             });
         } catch (error) {
-            console.error("Error updating player list:", error);
+            console.error("Error updating player list:", error.status);
         }
     };
 
@@ -205,7 +205,7 @@ const board = (() => {
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
-            console.log("Error al salir de la sesión:", error);
+            console.log("Error al salir de la sesión:", error.status);
         }
     };
 
@@ -316,7 +316,7 @@ const board = (() => {
         try {
             await api.resetGameSession(session); 
         } catch (error) {
-            console.log("Error al reiniciar la sesión:", error);
+            console.log("Error al reiniciar la sesión:", error.status);
         }
     }
 
@@ -325,7 +325,6 @@ const board = (() => {
         await stompClient.send("/app/sessions", {});
         sessionStorage.removeItem('session');
         window.location.href = "../templates/sessionMenu.html";
-        
     }
 
     return {
