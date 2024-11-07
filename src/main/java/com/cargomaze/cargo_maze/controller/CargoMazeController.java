@@ -53,6 +53,15 @@ public class CargoMazeController {
         }        
     }
 
+    @GetMapping("/sessions/{id}/state")
+    public ResponseEntity<?> getGameSessionState(@PathVariable String id){
+        try{
+            return new ResponseEntity<>(cargoMazeServices.getGameSession(id).getStatus(), HttpStatus.OK);
+        } catch (CargoMazePersistanceException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
+        }
+    }
+
     //Player controller
     
     @GetMapping("/players/{nickName}")
@@ -137,6 +146,5 @@ public class CargoMazeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
         }
     }
-
 
 }

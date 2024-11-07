@@ -17,6 +17,14 @@ const apiClient = (() => {
             console.error("Error searching for gameSession by id", error);
         }
     }
+    const getGameSessionState = async (gameSessionId) => {
+        try {
+            let response = await fetch(`${url}sessions/${gameSessionId}/state`);
+            return await response.json();
+        } catch (error) {
+            console.error("Error searching for gameSession by id", error);
+        }
+    }
 
     const getPlayersInSession = async (gameSessionId) => {
         try {
@@ -99,6 +107,7 @@ const apiClient = (() => {
     return {
         login,
         getGameSessionBoard,
+        getGameSessionState,
         enterSession,
         getPlayersInSession,
         movePlayer,
