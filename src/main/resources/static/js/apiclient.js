@@ -5,8 +5,9 @@ se resuelva, es decir, esperar a que los datos lleguen del servidor.
 
 const apiClient = (() => {
 
-    //const url = "http://localhost:8080/cargoMaze/";
+
     const url = "https://cargomaze-dherg7f8fcbve5gw.eastus-01.azurewebsites.net/cargoMaze/"
+
 
     //GET
 

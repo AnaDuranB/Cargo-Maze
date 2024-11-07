@@ -30,26 +30,65 @@ public class Board {
                 cells[x][y] = new Cell(Cell.EMPTY);
             }
         }
-        for (int x = 0; x < WIDTH; x++) {
-            cells[x][0] = new Cell(Cell.WALL);
-            cells[x][HEIGHT-1] = new Cell(Cell.WALL);
-        }
-        for (int y = 0; y < HEIGHT; y++) {
-            cells[0][y] = new Cell(Cell.WALL);
-            cells[WIDTH-1][y] = new Cell(Cell.WALL);
-        }
+        // for (int x = 0; x < WIDTH; x++) {
+        //     cells[x][0] = new Cell(Cell.WALL);
+        //     cells[x][HEIGHT-1] = new Cell(Cell.WALL);
+        // }
+        // for (int y = 0; y < HEIGHT; y++) {
+        //     cells[0][y] = new Cell(Cell.WALL);
+        //     cells[WIDTH-1][y] = new Cell(Cell.WALL);
+        // }
 
         // walls
+
+        cells[2][0] = new Cell(Cell.WALL);
+        cells[3][0] = new Cell(Cell.WALL);
+        cells[9][0] = new Cell(Cell.WALL);
+        cells[10][0] = new Cell(Cell.WALL);
+        cells[11][0] = new Cell(Cell.WALL);
+        cells[12][0] = new Cell(Cell.WALL);
+        cells[13][0] = new Cell(Cell.WALL);
+
+        cells[0][1] = new Cell(Cell.WALL);
+        cells[3][1] = new Cell(Cell.WALL);
+        cells[10][1] = new Cell(Cell.WALL);
+
+        cells[0][2] = new Cell(Cell.WALL);
         cells[5][2] = new Cell(Cell.WALL);
+
+        cells[0][3] = new Cell(Cell.WALL);
+        cells[1][3] = new Cell(Cell.WALL);
         cells[5][3] = new Cell(Cell.WALL);
+
+        cells[1][4] = new Cell(Cell.WALL);
+        cells[7][4] = new Cell(Cell.WALL);
+
+        cells[7][5] = new Cell(Cell.WALL);
+        cells[8][5] = new Cell(Cell.WALL);
+        cells[14][5] = new Cell(Cell.WALL);
+
+        cells[0][6] = new Cell(Cell.WALL);
         cells[6][6] = new Cell(Cell.WALL);
+        cells[14][6] = new Cell(Cell.WALL);
+
         cells[6][7] = new Cell(Cell.WALL);
+        
+        cells[2][8] = new Cell(Cell.WALL);
+        cells[10][8] = new Cell(Cell.WALL);
+        cells[11][8] = new Cell(Cell.WALL);
+
+        cells[2][9] = new Cell(Cell.WALL);
+        cells[3][9] = new Cell(Cell.WALL);
+        cells[4][9] = new Cell(Cell.WALL);
+        cells[10][9] = new Cell(Cell.WALL);
+
+
 
         // target positions
+        addTarget(new Position(7, 1));
         addTarget(new Position(13, 3));
-        addTarget(new Position(13, 4));
-        addTarget(new Position(13, 6));
-        addTarget(new Position(6, 5));
+        addTarget(new Position(7, 6));
+        addTarget(new Position(8, 9));
 
         // boxes
 //       addBox(new Position(2, 2));
@@ -59,10 +98,10 @@ public class Board {
         addBox(new Position(7, 3));
 
         // player start positions
-        playerStartPositions.add(new Position(1, 1));
-        playerStartPositions.add(new Position(1, HEIGHT-2));
-        playerStartPositions.add(new Position(WIDTH-2, 1));
-        playerStartPositions.add(new Position(WIDTH-2, HEIGHT-2));
+        playerStartPositions.add(new Position(0, 0));
+        playerStartPositions.add(new Position(0, HEIGHT-1));
+        playerStartPositions.add(new Position(WIDTH-1, 0));
+        playerStartPositions.add(new Position(WIDTH-1, HEIGHT-1));
 
     }
 
