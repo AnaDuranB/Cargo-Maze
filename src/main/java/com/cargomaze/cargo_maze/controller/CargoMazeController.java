@@ -138,7 +138,6 @@ public class CargoMazeController {
     @DeleteMapping("/sessions/{id}/players/{nickname}")
     public ResponseEntity<?> removePlayerFromGame(@PathVariable String id, @PathVariable String nickname) {
         try {
-            System.out.println("Removing player " + nickname + " from game " + id); 
             cargoMazeServices.removePlayerFromGame(nickname, id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
         } catch (CargoMazePersistanceException ex) {

@@ -185,6 +185,11 @@ public class GameSession {
         if(GameStatus.RESETING_GAME.equals(status) && players.isEmpty()){
             status = GameStatus.WAITING_FOR_PLAYERS;
         }
+
+        else if(players.isEmpty() && GameStatus.IN_PROGRESS.equals(status)){
+            board.reset();
+            status = GameStatus.WAITING_FOR_PLAYERS;
+        }
     }
 
     public void resetGame(){
