@@ -269,6 +269,32 @@ const board = (() => {
         // modal.classList.add('show');
 //        createConfetti();
         modal.style.display = 'flex';
+        createConfetti();
+    };
+    const createConfetti = () => {
+        const duration = 5 * 1000;
+        const animationEnd = Date.now() + duration;
+    
+        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+    
+        const confettiInterval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+    
+            if (timeLeft <= 0) {
+                clearInterval(confettiInterval);
+                return;
+            }
+    
+            confetti({
+                particleCount: 50,
+                startVelocity: 30,
+                spread: 360,
+                origin: {
+                    x: randomInRange(0.1, 0.9),
+                    y: Math.random() - 0.2
+                }
+            });
+        }, 250);
     };
     const disableMovements = () => {
         const controls = document.getElementById('controls');
