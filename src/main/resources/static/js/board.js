@@ -6,6 +6,22 @@ const board = (() => {
             this.y=y;
         }        
     }
+    const handleKeydown = (e) => {
+        switch(e.key) {
+            case 'a':
+                createPositionFromMovement('LEFT');
+                break;
+            case 'd':
+                createPositionFromMovement('RIGHT');
+                break;
+            case 'w':
+                createPositionFromMovement('UP');
+                break;
+            case 's':
+                createPositionFromMovement('DOWN');
+                break;
+        }
+    };
 
     const api = apiClient;
     const nickname = sessionStorage.getItem('nickname');
@@ -21,28 +37,14 @@ const board = (() => {
         await board.exitFromGameSession();
     });
     */
-
+    
+    //MOVEMENTS LISTENERS
     document.addEventListener('DOMContentLoaded', (event) => {
         board.initializeBoard();
     });
+    document.addEventListener('keydown', handleKeydown);
+    
 
-    //MOVEMENTS LISTENERS
-    document.addEventListener('keydown', (e) => {
-        switch(e.key) {
-            case 'a':
-                createPositionFromMovement('LEFT');
-                break;
-            case 'd':
-                createPositionFromMovement('RIGHT');
-                break;
-            case 'w':
-                createPositionFromMovement('UP');
-                break;
-            case 's':
-                createPositionFromMovement('DOWN');
-                break;
-        }
-    });
 
     const getSessionState = async () => {
         try {
@@ -147,9 +149,9 @@ const board = (() => {
             await api.movePlayer(session, nickname, position);
             await stompClient.send("/app/sessions/move." + session, {});
             getSessionState();
-         } catch (error) {
+        } catch (error) {
             //alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
-         }
+        }
     };
 
     //PLAYERS PANEL FUNCIONALITY
