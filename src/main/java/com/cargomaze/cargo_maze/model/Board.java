@@ -11,7 +11,6 @@ public class Board {
     private List<Position> targetPositions;
     private List<Box> boxes;
     private List<Position> playerStartPositions;
-    private List<Player> players;
 
     public Board() {
         initializeBoard();
@@ -72,16 +71,23 @@ public class Board {
                 position.getY() >= 0 && position.getY() < HEIGHT;
     }
 
+    public boolean isTargetAt(Position position) {
+        return targetPositions.contains(position);
+    }
+
     public boolean hasWallAt(Position position) {
-        return cells[position.getX()][position.getY()].getState() == Cell.WALL;
+        String state= cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.WALL);
     }
 
     public boolean hasBoxAt(Position position) {
-        return cells[position.getX()][position.getY()].getState() == Cell.BOX;
+        String state= cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.BOX) || state.equals(Cell.BOX_ON_TARGET);
     }
 
     public boolean isPlayerAt(Position position){
-        return cells[position.getX()][position.getY()].getState() == Cell.PLAYER;
+        String state = cells[position.getX()][position.getY()].getState();
+        return state.equals(Cell.PLAYER) || state.equals(Cell.PLAYER_ON_TARGET);
     }
 
     public Box getBoxAt(Position position) {
@@ -98,6 +104,7 @@ public class Board {
     public boolean isComplete() {
         return boxes.stream().allMatch(Box::isAtTarget);
     }
+
 
     private void addTarget(Position position) {
         cells[position.getX()][position.getY()] = new Cell(Cell.TARGET);;
@@ -136,11 +143,12 @@ public class Board {
             case Cell.TARGET: return "T";
             case Cell.PLAYER: return "P";
             case Cell.BOX: return "B";
+            case Cell.BOX_ON_TARGET: return "BT";
+            case Cell.PLAYER_ON_TARGET: return "PT";
             default: return "?";
         }
     }
 
-    public void setPlayers(List<Player> players){ this.players = players;}
 
     public void setPlayerInBoard(Position position){
         cells[position.getX()][position.getY()] = new Cell(Cell.PLAYER);
@@ -162,5 +170,13 @@ public class Board {
             }
         }
         return boardState;
+    }
+
+    public void reset(){
+        cells = new Cell[WIDTH][HEIGHT];
+        targetPositions.clear();
+        boxes.clear();
+        playerStartPositions.clear();
+        initializeBoard();
     }
 }

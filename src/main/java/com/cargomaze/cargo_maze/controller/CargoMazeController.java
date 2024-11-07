@@ -10,12 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
+import com.cargomaze.cargo_maze.services.exceptions.CargoMazeServicesException;
 
-import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 
 @RestController
 @RequestMapping("/cargoMaze")
@@ -51,6 +50,15 @@ public class CargoMazeController {
         } catch ( CargoMazePersistanceException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
         }        
+    }
+
+    @GetMapping("/sessions/{id}/state")
+    public ResponseEntity<?> getGameSessionState(@PathVariable String id){
+        try{
+            return new ResponseEntity<>(cargoMazeServices.getGameSession(id).getStatus(), HttpStatus.OK);
+        } catch (CargoMazePersistanceException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
+        }
     }
 
     //Player controller
@@ -138,5 +146,14 @@ public class CargoMazeController {
         }
     }
 
+    @PutMapping("/sessions/{id}/reset")
+    public ResponseEntity<?> resetGameSession(@PathVariable String id) {
+        try {
+            cargoMazeServices.resetGameSession(id);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(Map.of("message", "Game session reset", "sessionId", id));
+        } catch (CargoMazePersistanceException | CargoMazeServicesException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
+        }
+}
 
 }

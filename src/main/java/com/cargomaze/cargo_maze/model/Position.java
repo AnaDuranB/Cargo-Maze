@@ -2,6 +2,8 @@ package com.cargomaze.cargo_maze.model;
 
 import java.util.Objects;
 
+import lombok.ToString;
+
 public class Position {
     private int x;
     private int y;
@@ -30,6 +32,11 @@ public class Position {
         if (!(o instanceof Position)) return false;
         Position position = (Position) o;
         return x == position.getX() && y == position.getY();
+    }
+
+    @Override
+    public String toString(){
+        return "(" + x + "," + y + ")";
     }
 
     @Override

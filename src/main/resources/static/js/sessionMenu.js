@@ -4,6 +4,11 @@ const sessionMenu = (() => {
     let stompClient = null;
     let subscription = null;
 
+    document.addEventListener('DOMContentLoaded', (event) => {
+        sessionMenu.updateUserCount();
+    });
+
+
     const enterSession = async (sessionId) => {
         try {
             if (!nickname || nickname.length === 0) {
@@ -37,11 +42,16 @@ const sessionMenu = (() => {
     };
 
     const updateUserCount = async () => { //REALIZAR -> QUE ACTUALIZE SEGUN EL ID DE LA SESSION INCIADA
-        const currentUsers = await api.getPlayerCountInSession("1");
-        const element = document.getElementById("capacity-1");
-        if (element) {
-            element.textContent = `${currentUsers}/4`;
+        try {
+            const currentUsers = await api.getPlayerCountInSession("1");
+            const element = document.getElementById("capacity-1");
+            if (element) {
+                element.textContent = `${currentUsers}/4`;
+            }
+        } catch (error) {
+            console.log(error);
         }
+
     };
     
 

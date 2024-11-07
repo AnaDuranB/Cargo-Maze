@@ -1,5 +1,6 @@
 package com.cargomaze.cargo_maze.model;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
@@ -16,14 +17,12 @@ public class GameSession {
         players = new ArrayList<>();
         status = GameStatus.WAITING_FOR_PLAYERS;
         board = new Board(); //Sera una instancia inyectada (para más mapas en el futuro)
-        board.setPlayers(players);
     }
 
     public void verifyStartingCondition(){
         if(players.size() == 4 && players.stream().allMatch(Player::isReady)){
             status = GameStatus.IN_PROGRESS;
         }
-        System.out.println(status);
     }
 
     public boolean addPlayer(Player player) {
@@ -56,6 +55,15 @@ public class GameSession {
             if (box.lock.tryLock() && board.getCellAt(boxNewPosition).lock.tryLock()) { // Lockeamos tanto la caja a mover y la celda a donde se va mover la caja
                 try {
                     box.move(boxNewPosition); // se cambia el lugar donde esta la caja
+                    if(board.isTargetAt(boxNewPosition)) {
+                        box.setAtTarget(true);
+                        boolean allOtherBoxesAtTarget = board.getBoxes().stream()
+                        .filter(b -> !b.equals(box))
+                        .allMatch(Box::isAtTarget);
+                        if(allOtherBoxesAtTarget){
+                            status = GameStatus.COMPLETED;
+                        }
+                    } // si la caja esta en un target
                     board.getCellAt(boxNewPosition).setState(Cell.BOX); // se cambia el estado de la celda
                 } finally {
                     box.lock.unlock(); // se desbloquean los elementos accedidos
@@ -68,6 +76,7 @@ public class GameSession {
         }
         return false;
     }
+
 
     private boolean isValidPlayerMove(Position currentPosition, Position newPosition){
         return currentPosition.isAdjacent(newPosition) && board.isValidPosition(newPosition) && !board.hasWallAt(newPosition) && !board.isPlayerAt(newPosition);
@@ -133,6 +142,8 @@ public class GameSession {
         }
     }
 
+    
+
     public void updateGameStatus() {
         if (board.isComplete()) {
             status = GameStatus.COMPLETED;
@@ -171,6 +182,14 @@ public class GameSession {
         players.remove(player);
         player.setIndex(-1);
         player.updatePosition(null);
+        if(GameStatus.RESETING_GAME.equals(status) && players.isEmpty()){
+            status = GameStatus.WAITING_FOR_PLAYERS;
+        }
+    }
+
+    public void resetGame(){
+        status = GameStatus.RESETING_GAME;
+        board.reset();
     }
 }
 

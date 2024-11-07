@@ -10,9 +10,9 @@ import com.cargomaze.cargo_maze.model.GameStatus;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.impl.InMemoryCargoMazePersistance;
+import com.cargomaze.cargo_maze.services.exceptions.CargoMazeServicesException;
 
 import java.util.List;
-import java.util.UUID;
 
 
 @Service
@@ -89,6 +89,16 @@ public class CargoMazeServices {
         GameSession gameSession = persistance.getSession(gameSessionId); 
         Position newPosition = new Position(player.getPosition().getX() + direction.getX(), player.getPosition().getY() + direction.getY());
         return gameSession.movePlayer(player, newPosition);
+    }
+
+
+    public void resetGameSession(String gameSessionId) throws CargoMazePersistanceException, CargoMazeServicesException {
+        GameSession session = persistance.getSession(gameSessionId);
+        if(!session.getStatus().equals(GameStatus.COMPLETED)){
+            throw new CargoMazeServicesException(CargoMazeServicesException.SESSION_IS_NOT_FINISHED);
+        }
+        session.resetGame();
+
     }
 }
 

@@ -7,13 +7,23 @@ const board = (() => {
         }        
     }
 
+
     const api = apiClient;
     const nickname = sessionStorage.getItem('nickname');
     const session = sessionStorage.getItem('session');
+    let state = null;
 
+    /* Escucha el evento `beforeunload` para detectar cuando el usuario intenta salir de la página.
+    window.addEventListener('beforeunload', async (event) => {
+        await board.exitFromGameSession();
+    });
 
-    //MOVEMENTS LISTENERS
-    document.addEventListener('keydown', (e) => {
+    // Escucha el evento `popstate` para detectar cambios en el historial, como cuando se presiona el botón "Atrás".
+    window.addEventListener('popstate', async (event) => {
+        await board.exitFromGameSession();
+    });
+    */
+    const handleKeydown = (e) => {
         switch(e.key) {
             case 'a':
                 createPositionFromMovement('LEFT');
@@ -28,14 +38,36 @@ const board = (() => {
                 createPositionFromMovement('DOWN');
                 break;
         }
+    };
+
+
+    //MOVEMENTS LISTENERS
+    document.addEventListener('DOMContentLoaded', (event) => {
+        board.initializeBoard();
     });
+
+    document.addEventListener('keydown', handleKeydown);
+    
+
+
+    const getSessionState = async () => {
+        try {
+            state = await api.getGameSessionState(session);
+            if(state === "COMPLETED") {
+                stompClient.send("/app/sessions/win." + session, {}, state);
+                resetSession();
+            }
+        } catch (error) {
+            console.log("Error al obtener el estado de la sesión:", error.status);
+        }
+    };
 
     const initializeBoard = async () => {
         try {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             generateBoard(boardArray);
         } catch (error) {
-            console.log("Error al obtener el tablero de la sesión:", error);
+            console.log("Error al obtener el tablero de la sesión:", error.status);
         }
     }
 
@@ -68,14 +100,23 @@ const board = (() => {
                         break;
                     case 'T':
                         cellDiv.classList.add('goal');
-                        cellDiv.innerText = '⭐'; 
+                        cellDiv.style.backgroundColor = 'yellow'; 
                         break;
                     case 'P':
                         cellDiv.classList.add('player');
                         cellDiv.innerText = '😃';
                         break;
+                    case 'BT':
+                        cellDiv.classList.add('boxtarget');
+                        cellDiv.innerText = '📦';
+                        cellDiv.style.backgroundColor = 'yellow'; 
+                        break;
+                    case 'PT':
+                        cellDiv.classList.add('playertarget');
+                        cellDiv.innerText = '😃';
+                        cellDiv.style.backgroundColor = 'yellow'; 
+                        break;
                 }
-
                 gameBoard.appendChild(cellDiv);
             });
         });
@@ -111,10 +152,11 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            return stompClient.send("/app/sessions/move." + session, {}); 
-         } catch (error) {
-            //alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
-         }
+            await stompClient.send("/app/sessions/move." + session, {});
+            getSessionState();
+        } catch (error) {
+            console.log("Error al mover el jugador:", error.status);
+        }
     };
 
     //PLAYERS PANEL FUNCIONALITY
@@ -122,12 +164,12 @@ const board = (() => {
     const initializeGameSession = async () => {
         try {
             if (!nickname || !session) {
-                console.error("Nickname o Game Session ID no encontrados.");
+                console.log("Nickname o Game Session ID no encontrados.");
                 return;
             }
             await updatePlayerList(session);
         } catch (error) {
-            console.error("Error initializing game session:", error);
+            console.log("Error initializing game session:", error.status);
         }
     };
 
@@ -150,7 +192,7 @@ const board = (() => {
                 playerList.appendChild(listItem);
             });
         } catch (error) {
-            console.error("Error updating player list:", error);
+            console.error("Error updating player list:", error.status);
         }
     };
 
@@ -163,7 +205,7 @@ const board = (() => {
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
-            console.log("Error al salir de la sesión:", error);
+            console.log("Error al salir de la sesión:", error.status);
         }
     };
 
@@ -193,6 +235,11 @@ const board = (() => {
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/updateBoard", function (eventbody) {
                 initializeBoard();
             });
+              
+            subscription = stompClient.subscribe('/topic/sessions/' + session + "/gameWon", function (eventbody) {
+                const gameStatus = eventbody.body;
+                handleGameStatus(gameStatus);
+            });
             resolve();
             }, function (error) {
             reject(error);
@@ -214,6 +261,70 @@ const board = (() => {
         .then(() =>enterSession());
     };
 
+    // GANAR
+    const handleGameStatus = (status) => {
+        if (status === 'COMPLETED') {
+            showWinModal();
+            disableMovements();
+        }
+    };
+
+    const showWinModal = () => {
+        const modal = document.getElementById('winModal');
+        // modal.classList.add('show');
+        // createConfetti();
+        modal.style.display = 'flex';
+        createConfetti();
+    };
+    const createConfetti = () => {
+        const duration = 5 * 1000;
+        const animationEnd = Date.now() + duration;
+    
+        const randomInRange = (min, max) => Math.random() * (max - min) + min;
+    
+        const confettiInterval = setInterval(() => {
+            const timeLeft = animationEnd - Date.now();
+    
+            if (timeLeft <= 0) {
+                clearInterval(confettiInterval);
+                return;
+            }
+    
+            confetti({
+                particleCount: 50,
+                startVelocity: 30,
+                spread: 360,
+                origin: {
+                    x: randomInRange(0.1, 0.9),
+                    y: Math.random() - 0.2
+                }
+            });
+        }, 250);
+    };
+
+    const disableMovements = () => {
+        const controls = document.getElementById('controls');
+        if (controls) {
+            controls.style.pointerEvents = 'none';
+            controls.style.opacity = '0.5';
+        }
+        document.removeEventListener('keydown', handleKeydown);
+    };
+
+    const resetSession = async () => {
+        try {
+            await api.resetGameSession(session); 
+        } catch (error) {
+            console.log("Error al reiniciar la sesión:", error.status);
+        }
+    }
+
+    const exitAfterWinning = async () => {
+        await api.removePlayerFromSession(session, nickname);
+        await stompClient.send("/app/sessions", {});
+        sessionStorage.removeItem('session');
+        window.location.href = "../templates/sessionMenu.html";
+    }
 
     return {
         init: function(){
@@ -223,9 +334,12 @@ const board = (() => {
         movePlayer,
         initializeBoard,
         exitFromGameSession,
-        initializeGameSession
+        initializeGameSession,
+        handleGameStatus,
+        showWinModal,
+        disableMovements,
+        exitAfterWinning
     };
 
 })();
-
 board.init();

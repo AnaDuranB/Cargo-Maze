@@ -11,30 +11,23 @@ const apiClient = (() => {
     //GET
 
     const getGameSessionBoard = async (gameSessionId) => {
-        try {
-            let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
-            return await response.json();
-        } catch (error) {
-            console.error("Error searching for gameSession by id", error);
-        }
+        let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
+        return await response.json();
+    }
+    
+    const getGameSessionState = async (gameSessionId) => {
+        let response = await fetch(`${url}sessions/${gameSessionId}/state`);
+        return await response.json();
     }
 
     const getPlayersInSession = async (gameSessionId) => {
-        try {
-            let response = await fetch(`${url}sessions/${gameSessionId}/players`);
-            return await response.json();
-        } catch (error) {
-            console.error("Error retrieving players in session:", error);
-        }
+        let response = await fetch(`${url}sessions/${gameSessionId}/players`);
+        return await response.json();
     };
 
     const getPlayerCountInSession = async (gameSessionId) => {
-        try {
-            let response = await fetch(`${url}sessions/${gameSessionId}/players/count`);
-            return await response.json();
-        } catch (error) {
-            console.log("Error retrieving player count in session:", error);
-        }
+        let response = await fetch(`${url}sessions/${gameSessionId}/players/count`);
+        return await response.json();
     };
 
     //POST
@@ -66,46 +59,52 @@ const apiClient = (() => {
 
     const movePlayer = async (gameSessionId, nickname, newPosition) => {
         let json = JSON.stringify({ "x": newPosition.x, "y": newPosition.y });
-        try {
-            let response = await $.ajax({
-                url: url + "sessions/" + gameSessionId + "/players/" + nickname + "/move",
-                type: 'PUT',
-                data: json,
-                contentType: "application/json"
-            });
-            return response; // Return the response to the caller
-        } catch (error) {
-            console.log(`Error moving: ${error.responseText || error.message}`);
-        }
+        let response = await $.ajax({
+            url: url + "sessions/" + gameSessionId + "/players/" + nickname + "/move",
+            type: 'PUT',
+            data: json,
+            contentType: "application/json"
+        });
+        return response; // Return the response to the caller
+
     };
+
+    const resetGameSession = async (gameSessionId) => {
+        let json = JSON.stringify({ gameSessionId: gameSessionId });
+        let response = await $.ajax({
+            url: url + "sessions/" + gameSessionId + "/reset",
+            type: 'PUT',
+            data: json,
+            contentType: "application/json"
+        });
+        return response; // Return the response to the caller
+    };
+
 
     //DELETE
 
     const removePlayerFromSession = async (gameSessionId, nickname) => {
         let json = JSON.stringify({ nickname: nickname, gameSessionId: gameSessionId });
-        try {
-            let response = await $.ajax({
-                url: url + "sessions/" + gameSessionId + "/players/" + nickname,
-                type: 'DELETE',
-                data: json,
-                contentType: "application/json"
-            });
-            console.log(response); // Log successful response
-            return response; // Return the response to the caller
-        } catch (error) {
-            console.error(`Error removing player from session: ${error.responseText || error.message}`);
-        }
+        let response = await $.ajax({
+            url: url + "sessions/" + gameSessionId + "/players/" + nickname,
+            type: 'DELETE',
+            data: json,
+            contentType: "application/json"
+        });
+        console.log(response); // Log successful response
+        return response; // Return the response to the caller
     }
 
     return {
         login,
         getGameSessionBoard,
+        getGameSessionState,
         enterSession,
         getPlayersInSession,
         movePlayer,
         removePlayerFromSession,
-        getPlayerCountInSession
-
+        getPlayerCountInSession,
+        resetGameSession
     };
 
 })();
