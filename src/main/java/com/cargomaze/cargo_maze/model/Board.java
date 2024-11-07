@@ -72,6 +72,10 @@ public class Board {
                 position.getY() >= 0 && position.getY() < HEIGHT;
     }
 
+    public boolean isTargetAt(Position position) {
+        return targetPositions.contains(position);
+    }
+
     public boolean hasWallAt(Position position) {
         String state= cells[position.getX()][position.getY()].getState();
         return state.equals(Cell.WALL);
@@ -102,19 +106,6 @@ public class Board {
         return boxes.stream().allMatch(Box::isAtTarget);
     }
 
-    public void verifyBoxAtTarget(Box box){
-        boolean flag = true;
-        int counter = 0;
-        while(flag){
-            if(targetPositions.get(counter).equals(box.getPosition())){
-                box.setAtTarget(true);
-                flag = false;
-            }
-        }
-        if(flag){
-            box.setAtTarget(false);
-        }
-    }   
 
     private void addTarget(Position position) {
         cells[position.getX()][position.getY()] = new Cell(Cell.TARGET);;
@@ -154,7 +145,7 @@ public class Board {
             case Cell.PLAYER: return "P";
             case Cell.BOX: return "B";
             case Cell.BOX_ON_TARGET: return "BT";
-            
+            case Cell.PLAYER_ON_TARGET: return "PT";
             default: return "?";
         }
     }

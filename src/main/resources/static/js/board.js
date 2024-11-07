@@ -100,7 +100,6 @@ const board = (() => {
                         cellDiv.style.backgroundColor = 'yellow'; 
                         break;
                 }
-
                 gameBoard.appendChild(cellDiv);
             });
         });

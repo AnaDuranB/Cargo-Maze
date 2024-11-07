@@ -58,9 +58,16 @@ public class GameSession {
             if (box.lock.tryLock() && board.getCellAt(boxNewPosition).lock.tryLock()) { // Lockeamos tanto la caja a mover y la celda a donde se va mover la caja
                 try {
                     box.move(boxNewPosition); // se cambia el lugar donde esta la caja
+                    if(board.isTargetAt(boxNewPosition)) {
+                        box.setAtTarget(true);
+                        boolean allOtherBoxesAtTarget = board.getBoxes().stream()
+                        .filter(b -> !b.equals(box))
+                        .allMatch(Box::isAtTarget);
+                        if(allOtherBoxesAtTarget){
+                            status = GameStatus.COMPLETED;
+                        }
+                    } // si la caja esta en un target
                     board.getCellAt(boxNewPosition).setState(Cell.BOX); // se cambia el estado de la celda
-                    //board.verifyBoxAtTarget(box);
-                    //updateGameStatus();
                 } finally {
                     box.lock.unlock(); // se desbloquean los elementos accedidos
                     board.getCellAt(boxNewPosition).lock.unlock();
@@ -137,6 +144,8 @@ public class GameSession {
             status = GameStatus.IN_PROGRESS;
         }
     }
+
+    
 
     public void updateGameStatus() {
         if (board.isComplete()) {
