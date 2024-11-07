@@ -75,7 +75,6 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         Player player = getPlayer(nickname);
         GameSession session = getSession(gameSessionId);
         session.removePlayer(player);
-        System.out.println(session.getPlayers().size());
         
     }
 

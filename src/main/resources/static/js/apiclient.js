@@ -73,18 +73,27 @@ const apiClient = (() => {
 
     const movePlayer = async (gameSessionId, nickname, newPosition) => {
         let json = JSON.stringify({ "x": newPosition.x, "y": newPosition.y });
-        try {
-            let response = await $.ajax({
+        let response = await $.ajax({
                 url: url + "sessions/" + gameSessionId + "/players/" + nickname + "/move",
                 type: 'PUT',
                 data: json,
                 contentType: "application/json"
             });
-            return response; // Return the response to the caller
-        } catch (error) {
-            console.log(`Error moving: ${error.responseText || error.message}`);
-        }
+        return response; // Return the response to the caller
+
     };
+
+    const resetGameSession = async (gameSessionId) => {
+        let json = JSON.stringify({ gameSessionId: gameSessionId });
+        let response = await $.ajax({
+            url: url + "sessions/" + gameSessionId + "/reset",
+            type: 'PUT',
+            data: json,
+            contentType: "application/json"
+        });
+        return response; // Return the response to the caller
+    };
+
 
     //DELETE
 
@@ -112,7 +121,8 @@ const apiClient = (() => {
         getPlayersInSession,
         movePlayer,
         removePlayerFromSession,
-        getPlayerCountInSession
+        getPlayerCountInSession,
+        resetGameSession
 
     };
 

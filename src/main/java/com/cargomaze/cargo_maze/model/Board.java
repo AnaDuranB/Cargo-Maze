@@ -11,7 +11,6 @@ public class Board {
     private List<Position> targetPositions;
     private List<Box> boxes;
     private List<Position> playerStartPositions;
-    private List<Player> players;
 
     public Board() {
         initializeBoard();
@@ -150,7 +149,6 @@ public class Board {
         }
     }
 
-    public void setPlayers(List<Player> players){ this.players = players;}
 
     public void setPlayerInBoard(Position position){
         cells[position.getX()][position.getY()] = new Cell(Cell.PLAYER);
@@ -172,5 +170,13 @@ public class Board {
             }
         }
         return boardState;
+    }
+
+    public void reset(){
+        cells = new Cell[WIDTH][HEIGHT];
+        targetPositions.clear();
+        boxes.clear();
+        playerStartPositions.clear();
+        initializeBoard();
     }
 }

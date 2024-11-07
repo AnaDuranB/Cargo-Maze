@@ -47,17 +47,11 @@
         <h2 class="modal-title">¡Felicitaciones! 🎉</h2>
         <p class="modal-message">¡El equipo ha completado el nivel!</p>
         <div class="modal-buttons">
-          <button class="modal-button primary" onclick="board.exitFromGameSession()">Salir</button>
+          <button class="modal-button primary" onclick="board.exitAfterWinning()">Salir</button>
         </div>
       </div>
     </div>
 
   </div>
-  <script>
-        // Llamar a initializeBoard cuando la página se cargue
-        document.addEventListener('DOMContentLoaded', (event) => {
-            board.initializeBoard();
-        });
-    </script>
 </body>
 </html>

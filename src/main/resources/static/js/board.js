@@ -6,6 +6,23 @@ const board = (() => {
             this.y=y;
         }        
     }
+
+
+    const api = apiClient;
+    const nickname = sessionStorage.getItem('nickname');
+    const session = sessionStorage.getItem('session');
+    let state = null;
+
+    /* Escucha el evento `beforeunload` para detectar cuando el usuario intenta salir de la página.
+    window.addEventListener('beforeunload', async (event) => {
+        await board.exitFromGameSession();
+    });
+
+    // Escucha el evento `popstate` para detectar cambios en el historial, como cuando se presiona el botón "Atrás".
+    window.addEventListener('popstate', async (event) => {
+        await board.exitFromGameSession();
+    });
+    */
     const handleKeydown = (e) => {
         switch(e.key) {
             case 'a':
@@ -23,34 +40,22 @@ const board = (() => {
         }
     };
 
-    const api = apiClient;
-    const nickname = sessionStorage.getItem('nickname');
-    const session = sessionStorage.getItem('session');
 
-    /* Escucha el evento `beforeunload` para detectar cuando el usuario intenta salir de la página.
-    window.addEventListener('beforeunload', async (event) => {
-        await board.exitFromGameSession();
-    });
-
-    // Escucha el evento `popstate` para detectar cambios en el historial, como cuando se presiona el botón "Atrás".
-    window.addEventListener('popstate', async (event) => {
-        await board.exitFromGameSession();
-    });
-    */
-    
     //MOVEMENTS LISTENERS
     document.addEventListener('DOMContentLoaded', (event) => {
         board.initializeBoard();
     });
+
     document.addEventListener('keydown', handleKeydown);
     
 
 
     const getSessionState = async () => {
         try {
-            const gameState = await api.getGameSessionState(session);
-            if(gameState === "COMPLETED") {
-                stompClient.send("/app/sessions/win." + session, {}, gameState);
+            state = await api.getGameSessionState(session);
+            if(state === "COMPLETED") {
+                stompClient.send("/app/sessions/win." + session, {}, state);
+                resetSession();
             }
         } catch (error) {
             console.log("Error al obtener el estado de la sesión:");
@@ -264,12 +269,14 @@ const board = (() => {
             disableMovements();
         }
     };
+
     const showWinModal = () => {
         const modal = document.getElementById('winModal');
         // modal.classList.add('show');
-//        createConfetti();
+        // createConfetti();
         modal.style.display = 'flex';
     };
+
     const disableMovements = () => {
         const controls = document.getElementById('controls');
         if (controls) {
@@ -278,6 +285,22 @@ const board = (() => {
         }
         document.removeEventListener('keydown', handleKeydown);
     };
+
+    const resetSession = async () => {
+        try {
+            await api.resetGameSession(session); 
+        } catch (error) {
+            console.log("Error al reiniciar la sesión:", error);
+        }
+    }
+
+    const exitAfterWinning = async () => {
+        await api.removePlayerFromSession(session, nickname);
+        await stompClient.send("/app/sessions", {});
+        sessionStorage.removeItem('session');
+        window.location.href = "../templates/sessionMenu.html";
+        
+    }
 
     return {
         init: function(){
@@ -290,7 +313,8 @@ const board = (() => {
         initializeGameSession,
         handleGameStatus,
         showWinModal,
-        disableMovements
+        disableMovements,
+        exitAfterWinning
     };
 
 })();

@@ -17,7 +17,6 @@ public class GameSession {
         players = new ArrayList<>();
         status = GameStatus.WAITING_FOR_PLAYERS;
         board = new Board(); //Sera una instancia inyectada (para más mapas en el futuro)
-        board.setPlayers(players);
     }
 
     public void verifyStartingCondition(){
@@ -182,11 +181,18 @@ public class GameSession {
     }
 
     public void removePlayer(Player player) {
-        System.out.println("Removing player " + player.getNickname());
         board.setCellState(player.getPosition(), Cell.EMPTY);
         players.remove(player);
         player.setIndex(-1);
         player.updatePosition(null);
+        if(GameStatus.RESETING_GAME.equals(status) && players.isEmpty()){
+            status = GameStatus.WAITING_FOR_PLAYERS;
+        }
+    }
+
+    public void resetGame(){
+        status = GameStatus.RESETING_GAME;
+        board.reset();
     }
 }
 
