@@ -95,7 +95,7 @@ const board = (() => {
                         cellDiv.style.backgroundColor = 'yellow'; 
                         break;
                     case 'PT':
-                        cellDiv.classList.add('player target');
+                        cellDiv.classList.add('playertarget');
                         cellDiv.innerText = '😃';
                         cellDiv.style.backgroundColor = 'yellow'; 
                         break;
