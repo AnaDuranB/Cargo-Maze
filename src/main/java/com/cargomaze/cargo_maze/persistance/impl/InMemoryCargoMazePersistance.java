@@ -30,7 +30,6 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
         players.put(player.getNickname(), player);
-        System.out.println(player);
     }
 
     @Override
