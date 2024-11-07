@@ -235,12 +235,11 @@ const board = (() => {
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/updateBoard", function (eventbody) {
                 initializeBoard();
             });
-
+              
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/gameWon", function (eventbody) {
                 const gameStatus = eventbody.body;
                 handleGameStatus(gameStatus);
             });
-
             resolve();
             }, function (error) {
             reject(error);

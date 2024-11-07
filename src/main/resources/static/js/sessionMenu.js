@@ -21,7 +21,7 @@ const sessionMenu = (() => {
             window.location.href = "../templates/game.html";
         } catch (error) {
             console.log(error);
-            alert("No se pudo ingresar a la sesión", error);
+            alert("No se pudo ingresar a la sesión");
         }
     };
 

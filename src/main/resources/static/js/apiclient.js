@@ -5,7 +5,8 @@ se resuelva, es decir, esperar a que los datos lleguen del servidor.
 
 const apiClient = (() => {
 
-    const url = "http://localhost:8080/cargoMaze/";
+    //const url = "http://localhost:8080/cargoMaze/";
+    const url = "https://cargo-maze-ede0gxc3fcc6hfe9.canadacentral-01.azurewebsites.net/cargoMaze/"
 
     //GET
 
@@ -13,6 +14,7 @@ const apiClient = (() => {
         let response = await fetch(`${url}sessions/${gameSessionId}/board/state`);
         return await response.json();
     }
+    
     const getGameSessionState = async (gameSessionId) => {
         let response = await fetch(`${url}sessions/${gameSessionId}/state`);
         return await response.json();
