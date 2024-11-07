@@ -274,9 +274,9 @@ const board = (() => {
         // modal.classList.add('show');
         // createConfetti();
         modal.style.display = 'flex';
-        createConfetti();
     };
-    const createConfetti = () => {
+    
+    /*const createConfetti = () => {
         const duration = 5 * 1000;
         const animationEnd = Date.now() + duration;
     
@@ -300,7 +300,7 @@ const board = (() => {
                 }
             });
         }, 250);
-    };
+    };*/
 
     const disableMovements = () => {
         const controls = document.getElementById('controls');
