@@ -44,6 +44,16 @@ const board = (() => {
         }
     });
 
+    const getSessionState = async () => {
+        try {
+            const gameState = await api.getGameSessionState(session);
+            if(gameState === "COMPLETED") {
+                stompClient.send("/app/sessions/win." + session, {}, gameState);
+            }
+        } catch (error) {
+            console.log("Error al obtener el estado de la sesión:");
+        }
+    };
 
     const initializeBoard = async () => {
         try {
@@ -135,11 +145,8 @@ const board = (() => {
     const movePlayer = async (position) => {
         try {
             await api.movePlayer(session, nickname, position);
-            const state = await api.getGameSessionState(session);
-
-            if(JSON.parse(state).equals("COMPLETED")) stompClient.send("/app/sessions/win." + session, {}, state);
-            return stompClient.send("/app/sessions/move." + session, {});
-            
+            await stompClient.send("/app/sessions/move." + session, {});
+            getSessionState();
          } catch (error) {
             //alert("No se pudo realizar el movimiento. Por favor, inténtalo de nuevo.");
          }
@@ -223,7 +230,7 @@ const board = (() => {
             });
 
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/gameWon", function (eventbody) {
-                const gameStatus = JSON.parse(eventbody.body);
+                const gameStatus = eventbody.body;
                 handleGameStatus(gameStatus);
             });
 
@@ -250,7 +257,6 @@ const board = (() => {
 
     // GANAR
     const handleGameStatus = (status) => {
-    console.log(gameStatus);
         if (status === 'COMPLETED') {
             showWinModal();
             disableMovements();
