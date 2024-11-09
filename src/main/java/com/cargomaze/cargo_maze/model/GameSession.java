@@ -1,7 +1,9 @@
 package com.cargomaze.cargo_maze.model;
 
-import java.security.PrivateKey;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -11,6 +13,7 @@ public class GameSession {
     private List<Player> players;
     private GameStatus status;
     private Board board;
+    private LinkedList<Integer> indexes = new LinkedList<>(Arrays.asList(0, 1, 2, 3));
 
     public GameSession(String sessionId) {
         this.sessionId = sessionId;
@@ -29,7 +32,7 @@ public class GameSession {
         if (players.size() >= 4 || status != GameStatus.WAITING_FOR_PLAYERS || player.getIndex() != -1) {
             return false;
         }
-        player.setIndex(players.size());
+        player.setIndex(indexes.poll());
         player.setGameSession(sessionId);
         player.setReady(true);
         players.add(player);
@@ -64,6 +67,9 @@ public class GameSession {
                             status = GameStatus.COMPLETED;
                         }
                     } // si la caja esta en un target
+                    else if(board.isTargetAt(boxPosition)){
+                        box.setAtTarget(false);
+                    }
                     board.getCellAt(boxNewPosition).setState(Cell.BOX); // se cambia el estado de la celda
                 } finally {
                     box.lock.unlock(); // se desbloquean los elementos accedidos
@@ -180,6 +186,9 @@ public class GameSession {
     public void removePlayer(Player player) {
         board.setCellState(player.getPosition(), Cell.EMPTY);
         players.remove(player);
+        if(status.equals(GameStatus.WAITING_FOR_PLAYERS)){
+            indexes.add(player.getIndex());
+        }
         player.setIndex(-1);
         player.updatePosition(null);
         if(GameStatus.RESETING_GAME.equals(status) && players.isEmpty()){
@@ -195,6 +204,7 @@ public class GameSession {
     public void resetGame(){
         status = GameStatus.RESETING_GAME;
         board.reset();
+        indexes.addAll(Arrays.asList(0, 1, 2, 3));
     }
 }
 

@@ -88,7 +88,7 @@ public class CargoMazeServices {
         Player player = persistance.getPlayer(playerId, gameSessionId);
         GameSession gameSession = persistance.getSession(gameSessionId); 
         Position newPosition = new Position(player.getPosition().getX() + direction.getX(), player.getPosition().getY() + direction.getY());
-        return gameSession.movePlayer(player, newPosition);
+        return gameSession.movePlayer(player, newPosition); 
     }
 
 
