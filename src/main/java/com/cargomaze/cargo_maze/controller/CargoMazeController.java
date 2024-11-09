@@ -119,6 +119,7 @@ public class CargoMazeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", ex.getMessage()));
         }
     }
+    
     @PutMapping("/sessions/{sessionId}/players/{nickname}/move")
     public ResponseEntity<?> movePlayer(@RequestBody Position position, @PathVariable String sessionId, @PathVariable String nickname) {
         if (position == null) {

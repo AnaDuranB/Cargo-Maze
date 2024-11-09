@@ -11,7 +11,7 @@ public class Board {
     private List<Position> targetPositions;
     private List<Box> boxes;
     private List<Position> playerStartPositions;
-
+     
     public Board() {
         initializeBoard();
     }

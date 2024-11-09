@@ -45,10 +45,9 @@ public class CargoMazeStompController {
         String nickname = (String) elements.get("nickname");
         Map<String, Integer> position = (Map<String, Integer>) elements.get("position");
         Position pos = new Position(position.get("x"), position.get("y"));
-        if(services.movePlayer(nickname, gameSessionId, pos)){
+        if(services.movePlayer(nickname, gameSessionId, pos)){ 
             msgt.convertAndSend(topicUri + "/" + gameSessionId + "/move", true);
         }
-        
     }
 
     @MessageMapping("/sessions/win.{gameSessionId}")
