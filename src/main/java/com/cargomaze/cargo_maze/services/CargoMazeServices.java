@@ -85,6 +85,7 @@ public class CargoMazeServices {
 
 
     public boolean movePlayer(String playerId, String gameSessionId, Position direction) throws CargoMazePersistanceException {
+        System.out.println("Moving player " + playerId + " in session " + gameSessionId);
         Player player = persistance.getPlayer(playerId, gameSessionId);
         GameSession gameSession = persistance.getSession(gameSessionId); 
         Position newPosition = new Position(player.getPosition().getX() + direction.getX(), player.getPosition().getY() + direction.getY());

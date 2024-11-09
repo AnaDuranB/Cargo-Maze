@@ -151,8 +151,13 @@ const board = (() => {
 
     const movePlayer = async (position) => {
         try {
-            await api.movePlayer(session, nickname, position);
-            await stompClient.send("/app/sessions/move." + session, {});
+            //await api.movePlayer(session, nickname, position);
+            await stompClient.send("/app/sessions/move." + session, {}, JSON.stringify({ 
+                nickname: nickname,
+                position: { 
+                  x: position.x, 
+                  y: position.y 
+                }}));
             getSessionState();
         } catch (error) {
             console.log("Error al mover el jugador:", error.status);

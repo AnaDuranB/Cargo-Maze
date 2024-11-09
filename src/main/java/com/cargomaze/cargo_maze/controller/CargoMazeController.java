@@ -153,6 +153,7 @@ public class CargoMazeController {
         } catch (CargoMazePersistanceException | CargoMazeServicesException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));
         }
-}
+    }
+
 
 }
