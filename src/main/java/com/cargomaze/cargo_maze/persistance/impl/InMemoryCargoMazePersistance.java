@@ -83,7 +83,6 @@ public class InMemoryCargoMazePersistance implements CargoMazePersistance{
         if(player == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
-        System.out.println("Player " + playerId + " is in session " + player.getGameSession());
         if(player.getGameSession() == null || !player.getGameSession().equals(gameSession)){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
         }

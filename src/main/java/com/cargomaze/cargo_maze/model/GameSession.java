@@ -64,6 +64,9 @@ public class GameSession {
                             status = GameStatus.COMPLETED;
                         }
                     } // si la caja esta en un target
+                    else if(board.isTargetAt(boxPosition)){
+                        box.setAtTarget(false);
+                    }
                     board.getCellAt(boxNewPosition).setState(Cell.BOX); // se cambia el estado de la celda
                 } finally {
                     box.lock.unlock(); // se desbloquean los elementos accedidos

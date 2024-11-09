@@ -30,7 +30,6 @@ public class CargoMazeStompController {
 
     @MessageMapping("/sessions")
     public void handleGameSessionEvent() throws Exception {
-        System.out.println("Game session player in or out event");
         msgt.convertAndSend(topicUri, true);
     }
 
@@ -54,7 +53,6 @@ public class CargoMazeStompController {
 
     @MessageMapping("/sessions/win.{gameSessionId}")
     public void handleWinEvent(@DestinationVariable String gameSessionId, String state) throws Exception {
-        System.out.println("hola");
         msgt.convertAndSend(topicUri + "/" + gameSessionId + "/gameWon", state);
     }
 }
