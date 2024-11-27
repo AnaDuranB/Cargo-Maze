@@ -174,7 +174,7 @@ const board = (() => {
             }
             await updatePlayerList(session);
         } catch (error) {
-            console.log("Error initializing game session:", error.status);
+            console.log(error.responseJSON.error);
         }
     };
 
@@ -197,7 +197,7 @@ const board = (() => {
                 playerList.appendChild(listItem);
             });
         } catch (error) {
-            console.error("Error updating player list:", error.status);
+            console.error(error.responseJSON.error);
         }
     };
 
@@ -210,7 +210,7 @@ const board = (() => {
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";
         } catch (error) {
-            console.log("Error al salir de la sesión:", error.status);
+            console.log(error.responseJSON.error);
         }
     };
 
@@ -320,7 +320,7 @@ const board = (() => {
         try {
             await api.resetGameSession(session); 
         } catch (error) {
-            console.log("Error al reiniciar la sesión:", error.status);
+            console.log("Error al reiniciar la sesión:", error.responseJSON.error);
         }
     }
 
