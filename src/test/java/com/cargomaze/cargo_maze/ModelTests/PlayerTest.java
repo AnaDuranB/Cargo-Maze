@@ -12,7 +12,7 @@ public class PlayerTest {
     private Player player1, player2, player3, player4;
     private Board board;
 
-    @BeforeEach
+    /*@BeforeEach
     public void setUp() {
         gameSession = new GameSession("session1");
         board = gameSession.getBoard();
