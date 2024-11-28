@@ -1,14 +1,21 @@
 package com.cargomaze.cargo_maze.model;
 
 import java.util.Objects;
+import java.util.UUID;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Position {
+    private String id;
     private int x;
     private int y;
+
 
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
+        this.id = UUID.randomUUID().toString();
     }
 
     // getters :)

@@ -25,6 +25,8 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
     @Autowired
     public CargoMazeDALImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
+        GameSession baseSession = new GameSession("1");
+        addSession(baseSession);
     }
 
     @Override
@@ -35,8 +37,9 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         if (session == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_NOT_FOUND);
         }
-
-        return session.getPlayerCount(); 
+        int playerCount = session.getPlayerCount();
+        System.out.println("Player count: " + playerCount);
+        return playerCount;
     }
 
     @Override
@@ -94,6 +97,7 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
         else{
+            System.out.println("Adding player: " + player.getNickname());
             mongoTemplate.save(player);
         }
     }

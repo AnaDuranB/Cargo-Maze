@@ -1,7 +1,12 @@
 package com.cargomaze.cargo_maze.model;
 
+import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class Cell {
     public static final String EMPTY =  "EMPTY";
     public static final String TARGET =  "TARGET";
@@ -10,11 +15,15 @@ public class Cell {
     public static final String BOX =  "BOX";
     public static final String BOX_ON_TARGET =  "BOX_ON_TARGET";
     public static final String PLAYER_ON_TARGET =  "PLAYER_ON_TARGET";
+    public final ReentrantLock lock;
     private String state = "";
-    public final ReentrantLock lock = new ReentrantLock();
+    @Id
+    private String id;
 
     public Cell(String state){
         this.state = state;
+        this.lock = new ReentrantLock();
+        this.id = UUID.randomUUID().toString();
     }
 
     public void setState(String newState){
