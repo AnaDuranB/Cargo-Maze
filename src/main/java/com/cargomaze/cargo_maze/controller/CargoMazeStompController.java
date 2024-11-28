@@ -8,7 +8,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import com.cargomaze.cargo_maze.model.Position;
+import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
 import com.cargomaze.cargo_maze.services.CargoMazeServices;
+import com.cargomaze.cargo_maze.services.exceptions.CargoMazeServicesException;
 
 @Controller
 public class CargoMazeStompController {
@@ -41,12 +43,17 @@ public class CargoMazeStompController {
     
 
     @MessageMapping("/sessions/move.{gameSessionId}")
-    public void handleMoveEvent(@DestinationVariable String gameSessionId, Map<String, Object> elements) throws Exception {
+    public void handleMoveEvent(@DestinationVariable String gameSessionId, Map<String, Object> elements) throws CargoMazePersistanceException, CargoMazeServicesException {
         String nickname = (String) elements.get("nickname");
         Map<String, Integer> position = (Map<String, Integer>) elements.get("position");
         Position pos = new Position(position.get("x"), position.get("y"));
-        if(services.move(nickname, gameSessionId, pos)){ 
+        try{
+            System.out.println("Moving player: " + nickname + " to position: " + pos + " STOMP ");
+            services.move(nickname, gameSessionId, pos);
             msgt.convertAndSend(topicUri + "/" + gameSessionId + "/move", true);
+        }
+        catch (CargoMazeServicesException | CargoMazePersistanceException ex){
+            System.out.println(ex.getMessage());
         }
     }
 

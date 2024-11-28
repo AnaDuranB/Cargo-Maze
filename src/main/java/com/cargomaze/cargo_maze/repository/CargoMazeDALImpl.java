@@ -49,6 +49,7 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         if(player == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
+        System.out.println("Player ID: " + player.getNickname() + "Session ID: " + player.getGameSession() + "Session ID: " + sessionId + player.getGameSession().equals(sessionId));
         if(player.getGameSession() == null || !player.getGameSession().equals(sessionId)){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
         }
@@ -67,6 +68,11 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
     }
 
     @Override
+    public List<Player> getPlayers() {
+        return mongoTemplate.findAll(Player.class);
+    }
+
+    @Override
     public List<Player> getPlayersInSession(String sessionId) {
         Query query = new Query(Criteria.where(GAME_SESSION_ID).is(sessionId));
         GameSession session = mongoTemplate.findOne(query, GameSession.class);
@@ -79,8 +85,8 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
     }
 
     @Override
-    public void addSession(GameSession session) {
-        mongoTemplate.save(session); 
+    public GameSession addSession(GameSession session) {
+        return mongoTemplate.save(session); 
     }
 
     @Override
@@ -90,7 +96,7 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
     }
 
     @Override
-    public void addPlayer(Player player) throws CargoMazePersistanceException {
+    public Player addPlayer(Player player) throws CargoMazePersistanceException {
         Query query = new Query(Criteria.where(PLAYER_ID).is(player.getNickname()));
         Player playerInDataBase = mongoTemplate.findOne(query, Player.class);
         if (playerInDataBase != null) {
@@ -98,42 +104,58 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         }
         else{
             System.out.println("Adding player: " + player.getNickname());
-            mongoTemplate.save(player);
+            return mongoTemplate.save(player);
         }
     }
 
     @Override
-    public void updatePlayerById(String playerId) throws CargoMazePersistanceException {
+    public void deletePlayer(Player player) throws CargoMazePersistanceException {
+        Query query = new Query(Criteria.where(PLAYER_ID).is(player.getNickname()));
+        Player playerInDataBase = mongoTemplate.findOne(query, Player.class);
+        if (playerInDataBase == null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+        mongoTemplate.remove(query, Player.class);
+    }
+
+    @Override
+    public void deletePlayers() throws CargoMazePersistanceException {
+        mongoTemplate.dropCollection(Player.class);
+    }
+
+    @Override
+    public Player updatePlayerById(String playerId) throws CargoMazePersistanceException {
         Query query = new Query(Criteria.where(PLAYER_ID).is(playerId));
         Player playerInDataBase = mongoTemplate.findOne(query, Player.class);
         if (playerInDataBase == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
         else{
-            mongoTemplate.save(playerInDataBase);
+            return mongoTemplate.save(playerInDataBase);
         }
     }
 
     @Override
-    public void updatePlayer(Player player) throws CargoMazePersistanceException{
-        mongoTemplate.save(player);
+    public Player updatePlayer(Player player) throws CargoMazePersistanceException{
+        return mongoTemplate.save(player);
     }
 
     @Override
-    public void updateGameSessionById(String sessionId) throws CargoMazePersistanceException {
+    public GameSession updateGameSessionById(String sessionId) throws CargoMazePersistanceException {
         Query query = new Query(Criteria.where(GAME_SESSION_ID).is(sessionId));
         GameSession sessionInDataBase = mongoTemplate.findOne(query, GameSession.class);
         if (sessionInDataBase == null) {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.GAME_SESSION_NOT_FOUND);
         }
         else{
-            mongoTemplate.save(sessionInDataBase);
+            return mongoTemplate.save(sessionInDataBase);
         }
     }
 
     @Override
-    public void updateGameSession(GameSession gameSession) throws CargoMazePersistanceException{
-        mongoTemplate.save(gameSession);
+    public GameSession updateGameSession(GameSession gameSession) throws CargoMazePersistanceException{
+        System.out.println("Updating game session: " + gameSession.getSessionId());
+        return mongoTemplate.save(gameSession);
     }
 
     @Override
@@ -146,4 +168,17 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         mongoTemplate.remove(query, Player.class);
     }
 
+    @Override
+    public void removePlayerFromSession(String playerId, String sessionId) throws CargoMazePersistanceException {
+        Query query = new Query(Criteria.where(PLAYER_ID).is(playerId));
+        Player player = mongoTemplate.findOne(query, Player.class);
+        if (player == null) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
+        }
+        if (player.getGameSession() == null || !player.getGameSession().equals(sessionId)) {
+            throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
+        }
+        player.setGameSession(null);
+        mongoTemplate.save(player);
+    }
 }
