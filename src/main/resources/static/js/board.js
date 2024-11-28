@@ -59,7 +59,7 @@ const board = (() => {
                 resetSession();
             }
         } catch (error) {
-            console.log("Error al obtener el estado de la sesión:", error.status);
+            console.log("Error al obtener el estado de la sesión:", error.responseJSON.error);
         }
     };
 
@@ -68,7 +68,7 @@ const board = (() => {
             const boardArray = await api.getGameSessionBoard("1"); // Esperar a que la promesa se resuelva
             generateBoard(boardArray);
         } catch (error) {
-            console.log("Error al obtener el tablero de la sesión:", error.status);
+            console.log("Error al obtener el tablero de la sesión:", error.responseJSON.error);
         }
     }
 
@@ -161,7 +161,7 @@ const board = (() => {
                 }}));
             //await getSessionState();
         } catch (error) {
-            console.log("Error al mover el jugador:", error.status);
+            console.log("Error al mover el jugador:", error.responseJSON.error);
         }
     };
 
