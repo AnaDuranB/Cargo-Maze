@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-
+@Document
 public class GameSession {
+    @Id
     private String sessionId;
     private List<Player> players;
     private GameStatus status;
@@ -98,4 +101,3 @@ public class GameSession {
         //indexes.addAll(Arrays.asList(0, 1, 2, 3));
     }
 }
-
