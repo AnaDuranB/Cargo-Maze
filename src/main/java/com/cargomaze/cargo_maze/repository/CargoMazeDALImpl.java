@@ -49,6 +49,7 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         if(player == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
+        System.out.println("Player session: " + player.getGameSession() + " Session ID: " + sessionId);
         if(player.getGameSession() == null || !player.getGameSession().equals(sessionId)){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
         }

@@ -141,7 +141,7 @@ public class CargoMazeServicesImpl implements CargoMazeServices {
 
     @Override
     public boolean move(String playerId, String gameSessionId, Position direction) throws CargoMazePersistanceException, CargoMazeServicesException {
-        Player player = persistance.getPlayerInSession(playerId, gameSessionId);
+        Player player = persistance.getPlayerInSession(gameSessionId, playerId );
         GameSession gameSession = persistance.getSession(gameSessionId);
         if (!gameSession.getStatus().equals(GameStatus.IN_PROGRESS)) {
             throw new CargoMazeServicesException(CargoMazeServicesException.SESSION_IS_NOT_IN_PROGRESS);
