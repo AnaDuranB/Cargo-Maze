@@ -51,7 +51,14 @@ public class CargoMazeStompController {
         try{
             System.out.println("Moving player: " + nickname + " to position: " + pos + " STOMP ");
             services.move(nickname, gameSessionId, pos);
-            msgt.convertAndSend(topicUri + "/" + gameSessionId + "/move", true);
+            if(services.isGameFinished(gameSessionId)){
+                System.out.println("Game won");
+                msgt.convertAndSend(topicUri + "/" + gameSessionId + "/move", false);
+                msgt.convertAndSend(topicUri + "/" + gameSessionId + "/gameWon", true);
+            }
+            else{
+                msgt.convertAndSend(topicUri + "/" + gameSessionId + "/move", true);
+            }
         }
         catch (CargoMazeServicesException | CargoMazePersistanceException ex){
             System.out.println(ex.getMessage());

@@ -3,6 +3,7 @@ package com.cargomaze.cargo_maze.services;
 import java.util.List;
 
 import com.cargomaze.cargo_maze.model.GameSession;
+import com.cargomaze.cargo_maze.model.GameStatus;
 import com.cargomaze.cargo_maze.model.Player;
 import com.cargomaze.cargo_maze.model.Position;
 import com.cargomaze.cargo_maze.persistance.exceptions.CargoMazePersistanceException;
@@ -36,6 +37,8 @@ public interface CargoMazeServices {
     String[][] getBoardState(String gameSessionId) throws CargoMazePersistanceException;
 
     boolean move(String playerId, String gameSessionId, Position direction) throws CargoMazePersistanceException, CargoMazeServicesException;
+
+    boolean isGameFinished(String gameSessionid) throws CargoMazePersistanceException;
     
     
 }

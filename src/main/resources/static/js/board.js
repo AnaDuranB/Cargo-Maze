@@ -53,6 +53,7 @@ const board = (() => {
     const getSessionState = async () => {
         try {
             state = await api.getGameSessionState(session);
+            console.log("Estado de la sesión:", state);
             if(state === "COMPLETED") {
                 stompClient.send("/app/sessions/win." + session, {}, state);
                 resetSession();
@@ -158,7 +159,7 @@ const board = (() => {
                   x: position.x, 
                   y: position.y 
                 }}));
-            getSessionState();
+            //await getSessionState();
         } catch (error) {
             console.log("Error al mover el jugador:", error.status);
         }
@@ -243,6 +244,7 @@ const board = (() => {
               
             subscription = stompClient.subscribe('/topic/sessions/' + session + "/gameWon", function (eventbody) {
                 const gameStatus = eventbody.body;
+                console.log(gameStatus);
                 handleGameStatus(gameStatus);
             });
             resolve();
@@ -268,7 +270,7 @@ const board = (() => {
 
     // GANAR
     const handleGameStatus = (status) => {
-        if (status === 'COMPLETED') {
+        if (status) {
             showWinModal();
             disableMovements();
         }

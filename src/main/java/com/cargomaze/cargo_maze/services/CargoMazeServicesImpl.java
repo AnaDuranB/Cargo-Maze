@@ -109,6 +109,11 @@ public class CargoMazeServicesImpl implements CargoMazeServices {
     }
 
     @Override
+    public boolean isGameFinished(String gameSessionid) throws CargoMazePersistanceException {
+        return persistance.getSession(gameSessionid).getStatus().equals(GameStatus.COMPLETED);
+    }
+
+    @Override
     public GameSession createSession(String sessionId) throws CargoMazePersistanceException {
         GameSession session = new GameSession(sessionId);
         return persistance.addSession(session);
