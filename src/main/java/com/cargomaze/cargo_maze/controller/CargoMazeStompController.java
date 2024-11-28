@@ -37,6 +37,7 @@ public class CargoMazeStompController {
 
     @MessageMapping("/sessions/enterOrExitSession.{gameSessionId}")
     public void handleGeneralGameBoardEvent(@DestinationVariable String gameSessionId) throws Exception {
+        System.out.println("Entering or exiting session: " + gameSessionId);
         msgt.convertAndSend(topicUri + "/" + gameSessionId + "/updatePlayerList", true);
         msgt.convertAndSend(topicUri + "/" + gameSessionId + "/updateBoard", true);
     }

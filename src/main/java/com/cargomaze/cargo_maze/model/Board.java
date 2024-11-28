@@ -245,4 +245,16 @@ public class Board {
     public String getId(){
         return id;
     }
+
+    @Override
+    public boolean equals(Object obj){
+        if(obj == this){
+            return true;
+        }
+        if(obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        Board board = (Board) obj;
+        return board.id.equals(this.id);
+    }
 }

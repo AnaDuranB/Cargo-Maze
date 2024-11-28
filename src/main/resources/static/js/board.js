@@ -203,9 +203,9 @@ const board = (() => {
 
     const exitFromGameSession = async () => {
         try {
-            await stompClient.send("/app/sessions/enterOrExitSession." + session, {});
             await api.removePlayerFromSession(session, nickname);
             await stompClient.send("/app/sessions", {});
+            await stompClient.send("/app/sessions/enterOrExitSession." + session, {});
             unsubscribe();
             sessionStorage.removeItem('session');
             window.location.href = "../templates/sessionMenu.html";

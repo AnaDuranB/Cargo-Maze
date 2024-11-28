@@ -88,8 +88,7 @@ public class CargoMazeController {
     @PostMapping("/players")
     public ResponseEntity<?> createPlayer(@RequestBody Map<String, String> nickname, HttpSession session) {
         try {
-            Player player = cargoMazeServices.createPlayer(nickname.get("nickname"));
-            System.out.println("Player created: " + player);
+            cargoMazeServices.createPlayer(nickname.get("nickname"));
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (CargoMazePersistanceException | CargoMazeServicesException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", ex.getMessage()));

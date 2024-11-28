@@ -45,4 +45,15 @@ public class Cell {
         return state;
     }
 
+    @Override
+    public boolean equals(Object obj){
+        if(obj == this){
+            return true;
+        }
+        if(obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        Cell cell = (Cell) obj;
+        return cell.id.equals(this.id);
+    }
 }

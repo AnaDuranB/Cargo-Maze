@@ -30,7 +30,6 @@ public class CargoMazeServicesImpl implements CargoMazeServices {
 
     @Override
     public Player createPlayer(String nickname) throws CargoMazePersistanceException, CargoMazeServicesException {
-        System.out.println("Creating player with nickname: " + nickname);
         if (nickname == null || nickname.isEmpty()) {
             throw new CargoMazeServicesException(CargoMazeServicesException.INVALID_NICKNAME);
         }
@@ -86,7 +85,6 @@ public class CargoMazeServicesImpl implements CargoMazeServices {
                 }
                 session.setStatus(GameStatus.WAITING_FOR_PLAYERS);
             }
-            System.out.println("CANTIDAD DE JUGADORES EN SESION LOCAL DEBERIA GUARDARSE " + session.getPlayers().size() + " SESION ID " + session.getSessionId());
             persistance.updateGameSession(session);
             return persistance.updatePlayer(player);
         }

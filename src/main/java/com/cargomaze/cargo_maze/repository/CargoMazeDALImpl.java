@@ -49,7 +49,6 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
         if(player == null){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_FOUND);
         }
-        System.out.println("Player ID: " + player.getNickname() + "Session ID: " + player.getGameSession() + "Session ID: " + sessionId + player.getGameSession().equals(sessionId));
         if(player.getGameSession() == null || !player.getGameSession().equals(sessionId)){
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_NOT_IN_SESSION);
         }
@@ -103,7 +102,6 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
             throw new CargoMazePersistanceException(CargoMazePersistanceException.PLAYER_ALREADY_EXISTS);
         }
         else{
-            System.out.println("Adding player: " + player.getNickname());
             return mongoTemplate.save(player);
         }
     }
@@ -154,7 +152,6 @@ public class CargoMazeDALImpl implements CargoMazeDAL {
 
     @Override
     public GameSession updateGameSession(GameSession gameSession) throws CargoMazePersistanceException{
-        System.out.println("Updating game session: " + gameSession.getSessionId());
         return mongoTemplate.save(gameSession);
     }
 
